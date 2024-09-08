@@ -3,6 +3,12 @@ from googleapiclient.discovery import build
 import os
 
 from quarterHandler import get_time_info
+from doc_config import file_id
+from doc_config import folder_id
+
+# link to file to clone
+file_id = file_id
+folder_id = folder_id
 
 SERVICE_ACCOUNT_FILE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "keys", "xina_service.json"
@@ -22,7 +28,7 @@ docs_service = build("docs", "v1", credentials=credentials)
 
 
 def clone_document(service, file_id, new_title):
-    copied_file = {"name": new_title, 'parents': ['1TLZ7-Sbq5FMtu5d5M6WOXJd6YRPVqpHc']}
+    copied_file = {"name": new_title, 'parents': [folder_id]}
     return service.files().copy(fileId=file_id, body=copied_file).execute()
 
 
@@ -31,7 +37,6 @@ def make_file_name():
     return f"BM Transparency Report: {date_list[0]} Quarter {date_list[1]}"
 
 
-file_id = "1IQINeVut1mcGqyufKICer3y5ZWoY3MIJLnlnB3FSDXU"
 new_title = make_file_name()
 cloned_doc = clone_document(drive_service, file_id, new_title)
 print(f'Cloned document ID: {cloned_doc["id"]}')
