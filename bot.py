@@ -2,13 +2,15 @@
 import os
 
 import discord
+from discord import app_commands
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-print(f"running token: {TOKEN}")
+#print(f"running token: {TOKEN}")
 
+testing_guild = 996319065679331348
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -16,12 +18,26 @@ intents.members = True
 intents.message_content = True
 intents.guilds = True
 
-client = discord.Client(intents=intents)
 
+client = discord.Client(intents=intents)
+tree = app_commands.CommandTree(client)
 
 @client.event
 async def on_ready():
+    '''
+    Initialization print
+    '''
+    await tree.sync(guild=discord.Object(id=testing_guild))
     print(f"{client.user} has connected to Discord!")
+
+
+@tree.command(
+        name="doc-clone",
+        description="clones template doc",
+        guild=discord.Object(id=testing_guild)
+)
+async def doc_clone_command(interaction):
+    await interaction.response.send_message("Command Recieved!")
 
 
 @client.event
