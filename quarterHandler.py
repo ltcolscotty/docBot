@@ -1,7 +1,8 @@
 import datetime
 
+
 def get_time_info():
-    
+
     today = datetime.datetime.now()
 
     if (today.month == 12) or (today.month <= 2):
