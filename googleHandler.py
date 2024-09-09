@@ -110,10 +110,10 @@ cur_quarter_name = quarterHandler.make_file_name()
 if not file_exists(drive_service, cur_quarter_name):
     cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
     print(f'Cloned document ID: {cloned_doc["id"]}')
-else:
-    time_info = quarterHandler.get_time_info()
-    document_id = get_file_id_by_name(drive_service, cur_quarter_name)
 
-    # make changes
-    result = replace_text(document_id, "quarterholder", time_info[0])
-    result = replace_text(document_id, "yearholder", time_info[1])
+time_info = quarterHandler.get_time_info()
+document_id = get_file_id_by_name(drive_service, cur_quarter_name)
+
+# make changes
+result = replace_text(document_id, "quarterholder", time_info[0])
+result = replace_text(document_id, "yearholder", str(time_info[1]))

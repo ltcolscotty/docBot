@@ -12,7 +12,7 @@ def get_time_info():
     elif today.month <= 8:
         quarter = "Summer"
     else:
-        quarter = "Autumn"
+        quarter = "Fall"
     return [quarter, today.year]
 
 
