@@ -14,3 +14,8 @@ def get_time_info():
     else:
         quarter = "Autumn"
     return [quarter, today.year]
+
+
+def make_file_name():
+    date_list = get_time_info()
+    return f"BM Transparency Report: {date_list[0]} Quarter {date_list[1]}"
