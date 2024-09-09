@@ -2,6 +2,12 @@ from roblox import Client
 
 
 async def get_role_count(group_id):
+    """
+    Args:
+    - group_id: int
+    Returns:
+    - Dictionary: {role name: count}
+    """
     client = Client()
     group = await client.get_group(group_id)
     roles = await group.get_roles()

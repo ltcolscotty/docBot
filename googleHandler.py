@@ -40,6 +40,13 @@ def clone_document(service, file_id, new_title):
 
 
 def file_exists(service, file_name):
+    """
+    Args:
+    - Service: drive_service
+    - File_name: name of file
+    Returns:
+    - Boolean: does file_name exist
+    """
     query = f"name='{file_name}' and trashed=false"
     results = (
         service.files()
@@ -108,6 +115,11 @@ def replace_text(document_id, old_text: str, new_text: str):
     return result
 
 def run_doc_update():
+    """
+    Updates quarterly transparency report
+
+    currently meant to be called in bot.py
+    """
     print("Starting document update!")
 
     cur_quarter_name = quarterHandler.make_file_name()

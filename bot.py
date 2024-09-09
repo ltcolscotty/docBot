@@ -41,6 +41,9 @@ async def on_ready():
     guild=discord.Object(id=doc_config.guild_id),
 )
 async def doc_clone_command(interaction):
+    """
+    Test Command
+    """
     await interaction.response.send_message("Command Recieved!")
 
 
@@ -50,6 +53,9 @@ async def doc_clone_command(interaction):
         guild=discord.Object(id=doc_config.guild_id)
 )
 async def update_doc_command(interaction):
+    """
+    Runs command to update document
+    """
     await interaction.response.send_message("Update Command Recieved!")
     googleHandler.run_doc_update()
 
@@ -57,6 +63,9 @@ async def update_doc_command(interaction):
 
 @client.event
 async def on_message(message):
+    """
+    Test Response
+    """
     if message.author == client.user:
         return
     if message.content == "bing chilling":
@@ -70,6 +79,15 @@ async def on_message(message):
 
 
 async def get_role_member_count(guild_id, role_name):
+    """
+    Args:
+    - guild_id: int
+    - role_name: String
+
+    Returns: Tuple
+    tuple[0]: int member count
+    tuple[1]: Error if there is any
+    """
     guild = client.get_guild(guild_id)
     if not guild:
         return None, "Guild not found"
@@ -78,5 +96,5 @@ async def get_role_member_count(guild_id, role_name):
         return None, f"Role '{role_name}' not found"
     return len(role.members), None
 
-
+# Run bot
 client.run(TOKEN)
