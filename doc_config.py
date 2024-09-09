@@ -7,5 +7,5 @@ mod_group = 5649380
 
 # Discord related config
 guild_id = 996319065679331348
-sdm_role_name = 'TestRole2'
-dm_role_name = 'TestRole1'
+sdm_role_name = "TestRole2"
+dm_role_name = "TestRole1"

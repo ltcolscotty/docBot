@@ -131,8 +131,12 @@ result = replace_text(document_id, "sgmCount", str(roles["Senior Moderator"]))
 result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
 
 print("Updating DMT Counts")
-sdm_count = asyncio.run(bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name))
-dm_count = asyncio.run(bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name))
+sdm_count = asyncio.run(
+    bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
+)
+dm_count = asyncio.run(
+    bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
+)
 
 result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
 result = replace_text(document_id, "dmCount", str(dm_count[0]))
