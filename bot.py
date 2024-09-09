@@ -6,6 +6,7 @@ from discord import app_commands
 from dotenv import load_dotenv
 
 import doc_config
+import googleHandler
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -41,6 +42,17 @@ async def on_ready():
 )
 async def doc_clone_command(interaction):
     await interaction.response.send_message("Command Recieved!")
+
+
+@tree.command(
+        name="update-doc",
+        description="creates/updates transparency doc for current quarter",
+        guild=discord.Object(id=doc_config.guild_id)
+)
+async def update_doc_command(interaction):
+    await interaction.response.send_message("Update Command Recieved!")
+    googleHandler.run_doc_update()
+
 
 
 @client.event
