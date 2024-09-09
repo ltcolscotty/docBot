@@ -2,7 +2,7 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import os
 
-from quarterHandler import get_time_info
+from quarterHandler import make_file_name
 from doc_config import file_id
 from doc_config import folder_id
 
@@ -32,11 +32,15 @@ def clone_document(service, file_id, new_title):
     return service.files().copy(fileId=file_id, body=copied_file).execute()
 
 
-def make_file_name():
-    date_list = get_time_info()
-    return f"BM Transparency Report: {date_list[0]} Quarter {date_list[1]}"
+def file_exists(service, file_name):
+    query = f"name='{file_name}' and trashed=false"
+    results = service.files().list(q=query, 
+                                   spaces='drive',
+                                   fields='files(id, name)').execute()
+    files = results.get('files', [])
+    return len(files) > 0
 
 
-new_title = make_file_name()
-cloned_doc = clone_document(drive_service, file_id, new_title)
+cur_quarter_name = make_file_name()
+cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
 print(f'Cloned document ID: {cloned_doc["id"]}')
