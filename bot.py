@@ -5,12 +5,12 @@ import discord
 from discord import app_commands
 from dotenv import load_dotenv
 
+import doc_config
+
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 # print(f"running token: {TOKEN}")
-
-testing_guild = 996319065679331348
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -28,14 +28,16 @@ async def on_ready():
     """
     Initialization print
     """
-    await tree.sync(guild=discord.Object(id=testing_guild))
+    await tree.sync(guild=discord.Object(id=doc_config.guild_id))
     print(f"{client.user} has connected to Discord!")
+
+    await client.close()
 
 
 @tree.command(
     name="doc-clone",
     description="clones template doc",
-    guild=discord.Object(id=testing_guild),
+    guild=discord.Object(id=doc_config.guild_id),
 )
 async def doc_clone_command(interaction):
     await interaction.response.send_message("Command Recieved!")
@@ -53,6 +55,16 @@ async def on_message(message):
     elif message.content == "Tiennamen Square":
         response = "-100 Social credits"
         await message.channel.send(response)
+
+
+async def get_role_member_count(guild_id, role_name):
+    guild = client.get_guild(guild_id)
+    if not guild:
+        return None, "Guild not found"
+    role = discord.utils.get(guild.roles, name=role_name)
+    if not role:
+        return None, f"Role '{role_name}' not found"
+    return len(role.members), None
 
 
 client.run(TOKEN)
