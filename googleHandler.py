@@ -3,13 +3,14 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import os
 
+import asyncio
 import quarterHandler
-from doc_config import file_id
-from doc_config import folder_id
+import robloxHandler
+import doc_config
 
 # link to file to clone
-file_id = file_id
-folder_id = folder_id
+file_id = doc_config.file_id
+folder_id = doc_config.folder_id
 
 # Set up Google API stuff
 SERVICE_ACCOUNT_FILE = os.path.join(
@@ -113,7 +114,14 @@ if not file_exists(drive_service, cur_quarter_name):
 
 time_info = quarterHandler.get_time_info()
 document_id = get_file_id_by_name(drive_service, cur_quarter_name)
+roles = asyncio.run(robloxHandler.get_role_count(doc_config.mod_group))
+
 
 # make changes
 result = replace_text(document_id, "quarterholder", time_info[0])
 result = replace_text(document_id, "yearholder", str(time_info[1]))
+result = replace_text(document_id, "bomCount", str(roles["Board of Moderation"]))
+result = replace_text(document_id, "admCount", str(roles["Administrator"]))
+result = replace_text(document_id, "supCount", str(roles["Supervisor"]))
+result = replace_text(document_id, "sgmCount", str(roles["Senior Moderator"]))
+result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
