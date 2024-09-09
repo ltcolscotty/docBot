@@ -1,5 +1,9 @@
 # Ignore files related to API keys
 .env
 
+#remove pycache
+*.pyc
+
 #Ignore keys
 keys/
+__pycache__/
