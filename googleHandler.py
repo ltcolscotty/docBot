@@ -3,12 +3,10 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 import os
-import asyncio
 
 import quarterHandler
 import robloxHandler
 import doc_config
-import bot
 
 
 # link to file to clone
@@ -39,16 +37,8 @@ def clone_document(service, file_id, new_title):
     return service.files().copy(fileId=file_id, body=copied_file).execute()
 
 
-def file_exists(service, file_name):
-    # TODO: UPDATE TO TRACK THE FOCUS FOLDER AND NOT GENERAL DRIVE
-    """
-    Args:
-    - Service: drive_service
-    - File_name: name of file
-    Returns:
-    - Boolean: does file_name exist
-    """
-    query = f"name='{file_name}' and trashed=false"
+def file_exists(service, file_name, folder_id):
+    query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     results = (
         service.files()
         .list(q=query, spaces="drive", fields="files(id, name)")
@@ -115,7 +105,8 @@ def replace_text(document_id, old_text: str, new_text: str):
     )
     return result
 
-async def run_doc_update():
+
+async def run_doc_update(dm_count, sdm_count):
     """
     Updates quarterly transparency report
 
@@ -126,17 +117,13 @@ async def run_doc_update():
     cur_quarter_name = quarterHandler.make_file_name()
     print(f"Running: {cur_quarter_name}")
 
-    if file_exists(drive_service, cur_quarter_name):
-        print("File not found, cloning...")
-        cloned_doc = clone_document(drive_service, doc_config.file_id, cur_quarter_name)
+    if not file_exists(drive_service, cur_quarter_name, doc_config.folder_id):
+        cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
         print(f'Cloned document ID: {cloned_doc["id"]}')
-    else:
-        print("File found, continuing...")
 
     time_info = quarterHandler.get_time_info()
     document_id = get_file_id_by_name(drive_service, cur_quarter_name)
     roles = await robloxHandler.get_role_count(doc_config.mod_group)
-
 
     # make changes
     print("Updating GMT Counts")
@@ -149,10 +136,29 @@ async def run_doc_update():
     result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
 
     print("Updating DMT Counts")
-    sdm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
-    dm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
 
     result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
     result = replace_text(document_id, "dmCount", str(dm_count[0]))
 
     print("Finished Update")
+
+
+def get_file_link(service, folder_id, file_name):
+    # Search for the file in the specified folder
+    query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
+    results = (
+        service.files()
+        .list(q=query, spaces="drive", fields="files(id, name, webViewLink)")
+        .execute()
+    )
+    files = results.get("files", [])
+
+    if not files:
+        print(f"No file named '{file_name}' found in the specified folder.")
+        return None
+
+    # Get the first file that matches (assuming file names are unique in the folder)
+    file = files[0]
+
+    # Return the webViewLink
+    return file.get("webViewLink")
