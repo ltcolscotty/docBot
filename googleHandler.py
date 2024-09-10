@@ -121,9 +121,9 @@ async def run_doc_update(dm_count, sdm_count):
         cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
         print(f'Cloned document ID: {cloned_doc["id"]}')
 
-        time_info = quarterHandler.get_time_info()
-        document_id = get_file_id_by_name(drive_service, cur_quarter_name)
-        roles = await robloxHandler.get_role_count(doc_config.mod_group)
+    time_info = quarterHandler.get_time_info()
+    document_id = get_file_id_by_name(drive_service, cur_quarter_name)
+    roles = await robloxHandler.get_role_count(doc_config.mod_group)
 
     # make changes
     print("Updating GMT Counts")
@@ -141,3 +141,22 @@ async def run_doc_update(dm_count, sdm_count):
     result = replace_text(document_id, "dmCount", str(dm_count[0]))
 
     print("Finished Update")
+
+
+def get_file_link(service, folder_id, file_name):
+    # Search for the file in the specified folder
+    query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
+    results = service.files().list(q=query,
+                                   spaces='drive',
+                                   fields='files(id, name, webViewLink)').execute()
+    files = results.get('files', [])
+
+    if not files:
+        print(f"No file named '{file_name}' found in the specified folder.")
+        return None
+
+    # Get the first file that matches (assuming file names are unique in the folder)
+    file = files[0]
+
+    # Return the webViewLink
+    return file.get('webViewLink')
