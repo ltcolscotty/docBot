@@ -40,6 +40,7 @@ def clone_document(service, file_id, new_title):
 
 
 def file_exists(service, file_name):
+    # TODO: UPDATE TO TRACK THE FOCUS FOLDER AND NOT GENERAL DRIVE
     """
     Args:
     - Service: drive_service
@@ -54,7 +55,7 @@ def file_exists(service, file_name):
         .execute()
     )
     files = results.get("files", [])
-    return len(files) > 0
+    return not (len(files) > 0)
 
 
 def get_file_id_by_name(service, file_name):
@@ -114,7 +115,7 @@ def replace_text(document_id, old_text: str, new_text: str):
     )
     return result
 
-def run_doc_update():
+async def run_doc_update():
     """
     Updates quarterly transparency report
 
@@ -125,13 +126,16 @@ def run_doc_update():
     cur_quarter_name = quarterHandler.make_file_name()
     print(f"Running: {cur_quarter_name}")
 
-    if not file_exists(drive_service, cur_quarter_name):
-        cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
+    if file_exists(drive_service, cur_quarter_name):
+        print("File not found, cloning...")
+        cloned_doc = clone_document(drive_service, doc_config.file_id, cur_quarter_name)
         print(f'Cloned document ID: {cloned_doc["id"]}')
+    else:
+        print("File found, continuing...")
 
     time_info = quarterHandler.get_time_info()
     document_id = get_file_id_by_name(drive_service, cur_quarter_name)
-    roles = asyncio.run(robloxHandler.get_role_count(doc_config.mod_group))
+    roles = await robloxHandler.get_role_count(doc_config.mod_group)
 
 
     # make changes
@@ -145,12 +149,8 @@ def run_doc_update():
     result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
 
     print("Updating DMT Counts")
-    sdm_count = asyncio.run(
-        bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
-    )
-    dm_count = asyncio.run(
-        bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
-    )
+    sdm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
+    dm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
 
     result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
     result = replace_text(document_id, "dmCount", str(dm_count[0]))

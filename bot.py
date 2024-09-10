@@ -32,7 +32,6 @@ async def on_ready():
     await tree.sync(guild=discord.Object(id=doc_config.guild_id))
     print(f"{client.user} has connected to Discord!")
 
-    await client.close()
 
 
 @tree.command(
@@ -57,7 +56,7 @@ async def update_doc_command(interaction):
     Runs command to update document
     """
     await interaction.response.send_message("Update Command Recieved!")
-    googleHandler.run_doc_update()
+    await googleHandler.run_doc_update()
 
 
 
