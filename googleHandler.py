@@ -49,7 +49,6 @@ def file_exists(service, file_name, folder_id):
     files = results.get("files", [])
     return len(files) > 0
 
-
 def get_file_id_by_name(service, file_name):
     """
     Should be run in conjunction with file_exists
@@ -107,38 +106,45 @@ def replace_text(document_id, old_text: str, new_text: str):
     )
     return result
 
+def run_doc_update():
+    """
+    Updates quarterly transparency report
 
-cur_quarter_name = quarterHandler.make_file_name()
-print(f"Running: {cur_quarter_name}")
+    currently meant to be called in bot.py
+    """
+    print("Starting document update!")
 
-if not file_exists(drive_service, cur_quarter_name, doc_config.folder_id):
-    cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
-    print(f'Cloned document ID: {cloned_doc["id"]}')
+    cur_quarter_name = quarterHandler.make_file_name()
+    print(f"Running: {cur_quarter_name}")
 
-time_info = quarterHandler.get_time_info()
-document_id = get_file_id_by_name(drive_service, cur_quarter_name)
-roles = asyncio.run(robloxHandler.get_role_count(doc_config.mod_group))
+    if not file_exists(drive_service, cur_quarter_name, doc_config.folder_id):
+        cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
+        print(f'Cloned document ID: {cloned_doc["id"]}')
+
+        time_info = quarterHandler.get_time_info()
+        document_id = get_file_id_by_name(drive_service, cur_quarter_name)
+        roles = asyncio.run(robloxHandler.get_role_count(doc_config.mod_group))
 
 
-# make changes
-print("Updating GMT Counts")
-result = replace_text(document_id, "quarterholder", time_info[0])
-result = replace_text(document_id, "yearholder", str(time_info[1]))
-result = replace_text(document_id, "bomCount", str(roles["Board of Moderation"]))
-result = replace_text(document_id, "admCount", str(roles["Administrator"]))
-result = replace_text(document_id, "supCount", str(roles["Supervisor"]))
-result = replace_text(document_id, "sgmCount", str(roles["Senior Moderator"]))
-result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
+    # make changes
+    print("Updating GMT Counts")
+    result = replace_text(document_id, "quarterholder", time_info[0])
+    result = replace_text(document_id, "yearholder", str(time_info[1]))
+    result = replace_text(document_id, "bomCount", str(roles["Board of Moderation"]))
+    result = replace_text(document_id, "admCount", str(roles["Administrator"]))
+    result = replace_text(document_id, "supCount", str(roles["Supervisor"]))
+    result = replace_text(document_id, "sgmCount", str(roles["Senior Moderator"]))
+    result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
 
-print("Updating DMT Counts")
-sdm_count = asyncio.run(
-    bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
-)
-dm_count = asyncio.run(
-    bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
-)
+    print("Updating DMT Counts")
+    sdm_count = asyncio.run(
+        bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
+    )
+    dm_count = asyncio.run(
+        bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
+    )
 
-result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
-result = replace_text(document_id, "dmCount", str(dm_count[0]))
+    result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
+    result = replace_text(document_id, "dmCount", str(dm_count[0]))
 
-print("Finished Update")
+    print("Finished Update")
