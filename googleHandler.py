@@ -49,6 +49,7 @@ def file_exists(service, file_name, folder_id):
     files = results.get("files", [])
     return len(files) > 0
 
+
 def get_file_id_by_name(service, file_name):
     """
     Should be run in conjunction with file_exists
@@ -106,7 +107,8 @@ def replace_text(document_id, old_text: str, new_text: str):
     )
     return result
 
-def run_doc_update():
+
+async def run_doc_update():
     """
     Updates quarterly transparency report
 
@@ -123,8 +125,7 @@ def run_doc_update():
 
         time_info = quarterHandler.get_time_info()
         document_id = get_file_id_by_name(drive_service, cur_quarter_name)
-        roles = asyncio.run(robloxHandler.get_role_count(doc_config.mod_group))
-
+        roles = await robloxHandler.get_role_count(doc_config.mod_group)
 
     # make changes
     print("Updating GMT Counts")
@@ -137,12 +138,8 @@ def run_doc_update():
     result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
 
     print("Updating DMT Counts")
-    sdm_count = asyncio.run(
-        bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
-    )
-    dm_count = asyncio.run(
-        bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
-    )
+    sdm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
+    dm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
 
     result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
     result = replace_text(document_id, "dmCount", str(dm_count[0]))
