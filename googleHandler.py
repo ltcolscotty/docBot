@@ -3,12 +3,10 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 import os
-import asyncio
 
 import quarterHandler
 import robloxHandler
 import doc_config
-import bot
 
 
 # link to file to clone
@@ -108,7 +106,7 @@ def replace_text(document_id, old_text: str, new_text: str):
     return result
 
 
-async def run_doc_update():
+async def run_doc_update(dm_count, sdm_count):
     """
     Updates quarterly transparency report
 
@@ -138,8 +136,6 @@ async def run_doc_update():
     result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
 
     print("Updating DMT Counts")
-    sdm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
-    dm_count = await bot.get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
 
     result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
     result = replace_text(document_id, "dmCount", str(dm_count[0]))

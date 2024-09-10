@@ -33,8 +33,6 @@ async def on_ready():
     print(f"{client.user} has connected to Discord!")
 
 
-
-
 @tree.command(
     name="doc-clone",
     description="clones template doc",
@@ -51,7 +49,9 @@ async def doc_clone_command(interaction):
 )
 async def doc_update(interaction):
     await interaction.response.send_message("Update command recieved")
-    await googleHandler.run_doc_update()
+    sdm_count = await get_role_member_count(doc_config.guild_id, doc_config.sdm_role_name)
+    dm_count = await get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
+    await googleHandler.run_doc_update(dm_count, sdm_count)
 
 
 @client.event
