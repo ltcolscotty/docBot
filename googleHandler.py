@@ -146,10 +146,12 @@ async def run_doc_update(dm_count, sdm_count):
 def get_file_link(service, folder_id, file_name):
     # Search for the file in the specified folder
     query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
-    results = service.files().list(q=query,
-                                   spaces='drive',
-                                   fields='files(id, name, webViewLink)').execute()
-    files = results.get('files', [])
+    results = (
+        service.files()
+        .list(q=query, spaces="drive", fields="files(id, name, webViewLink)")
+        .execute()
+    )
+    files = results.get("files", [])
 
     if not files:
         print(f"No file named '{file_name}' found in the specified folder.")
@@ -159,4 +161,4 @@ def get_file_link(service, folder_id, file_name):
     file = files[0]
 
     # Return the webViewLink
-    return file.get('webViewLink')
+    return file.get("webViewLink")
