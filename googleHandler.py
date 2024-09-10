@@ -39,8 +39,8 @@ def clone_document(service, file_id, new_title):
     return service.files().copy(fileId=file_id, body=copied_file).execute()
 
 
-def file_exists(service, file_name):
-    query = f"name='{file_name}' and trashed=false"
+def file_exists(service, file_name, folder_id):
+    query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     results = (
         service.files()
         .list(q=query, spaces="drive", fields="files(id, name)")
@@ -111,7 +111,7 @@ def replace_text(document_id, old_text: str, new_text: str):
 cur_quarter_name = quarterHandler.make_file_name()
 print(f"Running: {cur_quarter_name}")
 
-if not file_exists(drive_service, cur_quarter_name):
+if not file_exists(drive_service, cur_quarter_name, doc_config.folder_id):
     cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
     print(f'Cloned document ID: {cloned_doc["id"]}')
 
