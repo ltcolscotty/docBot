@@ -167,20 +167,20 @@ def get_file_link(service, folder_id, file_name):
 
 
 def find_previous_docs(service, folder_id):
-    query = f"'{folder_id}' in parents"
-    request = service.files.list(
+    query = f"'{folder_id}' in parents and trashed = false"
+    request = (service.files().list(
         q=query,
         spaces="drive",
         fields="files(name, createdTime)",
         orderBy="createdTime desc",
         pageSize=10,
-    )
-    response = request.execute()
-    files = response.get("files", [])
+    ).execute())
+    files = request.get("files", [])
 
     output_dict = {}
 
-    for filename in files:
-        output_dict[filename] = get_file_link(service, folder_id, filename)
+    for file in files:
+        file_name = file['name']
+        output_dict[file_name] = get_file_link(service, folder_id, file_name)
 
     return output_dict

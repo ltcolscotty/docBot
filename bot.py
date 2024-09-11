@@ -106,7 +106,7 @@ async def list_docs(interaction: discord.Interaction):
 
     for name in previous.keys():
         final_embed.add_field(
-            name="Document", value=(f"{name}: {previous[name]}"), inline=False
+            name=f"{name}", value=(f"{previous[name]}"), inline=False
         )
 
     await original_message.edit(embed=final_embed)
