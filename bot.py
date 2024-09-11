@@ -39,7 +39,7 @@ async def on_ready():
     description="clones template doc",
     guild=discord.Object(id=doc_config.guild_id),
 )
-async def doc_clone_command(interaction):
+async def doc_clone_command(interaction: discord.Interaction):
     """
     Test Command
     """
@@ -51,8 +51,17 @@ async def doc_clone_command(interaction):
     description="Creates transparency doc or updates transparency report if it exists",
     guild=discord.Object(id=doc_config.guild_id),
 )
-async def doc_update(interaction):
-    await interaction.response.send_message("Update command recieved")
+async def doc_update(interaction: discord.Interaction):
+    """
+    Slash command interaction
+    """
+    initial_embed = discord.Embed(
+        title="Transparency Report Request",
+        description="Command recieved! Processing updates...",
+        color=discord.Color.red()
+        )
+
+    await interaction.response.send_message(embed=initial_embed)
     original_message = await interaction.original_response()
     sdm_count = await get_role_member_count(
         doc_config.guild_id, doc_config.sdm_role_name
@@ -63,15 +72,27 @@ async def doc_update(interaction):
     link = googleHandler.get_file_link(
         googleHandler.drive_service, doc_config.folder_id, name
     )
-    await original_message.edit(content=f"{name}: {link}")
+
+    updated_embed = discord.Embed(
+        title="Transparency Report Request",
+        description=(f"{name}: {link}"),
+        color=discord.Color.green()
+        )
+
+    await original_message.edit(embed=updated_embed)
 
 @tree.command(
         name="previous-reports",
         description="Lists out previous transparency reports",
         guild=discord.Object(id=doc_config.guild_id)
 )
-async def list_docs(interaction):
-    pass
+async def list_docs(interaction: discord.Interaction):
+    initial_embed = discord.Embed(
+        title="Transparency Report List",
+        description="Command recieved! Searching for documents...",
+        color=discord.Color.red()
+    )
+    await interaction.response.send_message(embed=initial_embed)
 
 
 @client.event

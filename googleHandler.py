@@ -48,11 +48,11 @@ def file_exists(service, file_name, folder_id):
     return not (len(files) > 0)
 
 
-def get_file_id_by_name(service, file_name):
+def get_file_id_by_name(service, file_name, folder_id):
     """
     Should be run in conjunction with file_exists
     """
-    query = f"name='{file_name}' and trashed=false"
+    query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
 
     try:
         results = (
@@ -122,7 +122,7 @@ async def run_doc_update(dm_count, sdm_count):
         print(f'Cloned document ID: {cloned_doc["id"]}')
 
     time_info = quarterHandler.get_time_info()
-    document_id = get_file_id_by_name(drive_service, cur_quarter_name)
+    document_id = get_file_id_by_name(drive_service, cur_quarter_name, doc_config.folder_id)
     roles = await robloxHandler.get_role_count(doc_config.mod_group)
 
     # make changes
