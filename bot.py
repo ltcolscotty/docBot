@@ -58,8 +58,8 @@ async def doc_update(interaction: discord.Interaction):
     initial_embed = discord.Embed(
         title="Transparency Report Request",
         description="Command recieved! Processing updates...",
-        color=discord.Color.red()
-        )
+        color=discord.Color.red(),
+    )
 
     await interaction.response.send_message(embed=initial_embed)
     original_message = await interaction.original_response()
@@ -76,23 +76,40 @@ async def doc_update(interaction: discord.Interaction):
     updated_embed = discord.Embed(
         title="Transparency Report Request",
         description=(f"{name}: {link}"),
-        color=discord.Color.green()
-        )
+        color=discord.Color.green(),
+    )
 
     await original_message.edit(embed=updated_embed)
 
+
 @tree.command(
-        name="previous-reports",
-        description="Lists out previous transparency reports",
-        guild=discord.Object(id=doc_config.guild_id)
+    name="previous-reports",
+    description="Lists out previous transparency reports",
+    guild=discord.Object(id=doc_config.guild_id),
 )
 async def list_docs(interaction: discord.Interaction):
     initial_embed = discord.Embed(
         title="Transparency Report List",
         description="Command recieved! Searching for documents...",
-        color=discord.Color.red()
+        color=discord.Color.red(),
     )
     await interaction.response.send_message(embed=initial_embed)
+
+    previous = googleHandler.find_previous_docs(
+        googleHandler.drive_service, doc_config.folder_id
+    )
+    original_message = await interaction.original_response()
+    final_embed = discord.Embed(
+        title="Transparency Report List",
+        color=discord.Color.green(),
+    )
+
+    for name in previous.keys():
+        final_embed.add_field(
+            name="Document", value=(f"{name}: {previous[name]}"), inline=False
+        )
+
+    await original_message.edit(embed=final_embed)
 
 
 @client.event
@@ -123,6 +140,7 @@ async def get_role_member_count(guild_id, role_name):
     if not role:
         return None, f"Role '{role_name}' not found"
     return len(role.members), None
+
 
 # Run bot
 client.run(TOKEN)

@@ -122,7 +122,9 @@ async def run_doc_update(dm_count, sdm_count):
         print(f'Cloned document ID: {cloned_doc["id"]}')
 
     time_info = quarterHandler.get_time_info()
-    document_id = get_file_id_by_name(drive_service, cur_quarter_name, doc_config.folder_id)
+    document_id = get_file_id_by_name(
+        drive_service, cur_quarter_name, doc_config.folder_id
+    )
     roles = await robloxHandler.get_role_count(doc_config.mod_group)
 
     # make changes
@@ -165,6 +167,20 @@ def get_file_link(service, folder_id, file_name):
 
 
 def find_previous_docs(service, folder_id):
-    query = f""
-    results = (service.files().list(q=query, spaces="drive"m fields="files(id, name, webViewLink)"))
+    query = f"'{folder_id}' in parents"
+    request = service.files.list(
+        q=query,
+        spaces="drive",
+        fields="files(name, createdTime)",
+        orderBy="createdTime desc",
+        pageSize=10,
+    )
+    response = request.execute()
+    files = response.get("files", [])
 
+    output_dict = {}
+
+    for filename in files:
+        output_dict[filename] = get_file_link(service, folder_id, filename)
+
+    return output_dict
