@@ -162,3 +162,9 @@ def get_file_link(service, folder_id, file_name):
 
     # Return the webViewLink
     return file.get("webViewLink")
+
+
+def find_previous_docs(service, folder_id):
+    query = f""
+    results = (service.files().list(q=query, spaces="drive"m fields="files(id, name, webViewLink)"))
+

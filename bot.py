@@ -65,6 +65,14 @@ async def doc_update(interaction):
     )
     await original_message.edit(content=f"{name}: {link}")
 
+@tree.command(
+        name="previous-reports",
+        description="Lists out previous transparency reports",
+        guild=discord.Object(id=doc_config.guild_id)
+)
+async def list_docs(interaction):
+    pass
+
 
 @client.event
 async def on_message(message: discord.Message):
