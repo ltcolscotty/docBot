@@ -88,6 +88,7 @@ async def doc_update(interaction: discord.Interaction):
     guild=discord.Object(id=doc_config.guild_id),
 )
 async def list_docs(interaction: discord.Interaction):
+    print("List command called!")
     initial_embed = discord.Embed(
         title="Transparency Report List",
         description="Command recieved! Searching for documents...",
@@ -110,6 +111,7 @@ async def list_docs(interaction: discord.Interaction):
         )
 
     await original_message.edit(embed=final_embed)
+    print("Responded to list command!")
 
 
 @client.event
