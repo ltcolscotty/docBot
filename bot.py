@@ -82,13 +82,14 @@ async def doc_update(interaction: discord.Interaction):
     await original_message.edit(embed=updated_embed)
 
 
-
 @tree.command(
     name="announcement-set",
     description="Lists out previous transparency reports",
     guild=discord.Object(id=doc_config.guild_id),
 )
-async def announcement_set(interaction: discord.Interaction, title: str = "", text: str = ""):
+async def announcement_set(
+    interaction: discord.Interaction, title: str = "", text: str = ""
+):
     initial_embed = discord.Embed(
         title="Announcement Set",
         description="Command recieved! Processing updates...",
@@ -98,7 +99,9 @@ async def announcement_set(interaction: discord.Interaction, title: str = "", te
     original_message = await interaction.original_response()
     print("Recieved announcement set")
     cur_file = quarterHandler.make_file_name()
-    file_id = googleHandler.get_file_id_by_name(googleHandler.drive_service, cur_file, doc_config.folder_id)
+    file_id = googleHandler.get_file_id_by_name(
+        googleHandler.drive_service, cur_file, doc_config.folder_id
+    )
     googleHandler.make_announcement(file_id, title, text)
     print(f"Updated: {cur_file}")
     updated_embed = discord.Embed(

@@ -46,12 +46,12 @@ def file_exists(service, file_name, folder_id):
     )
     files = results.get("files", [])
 
-    if (len(files) > 0):
+    if len(files) > 0:
         print("Files Found")
     else:
         print("Files not found")
 
-    return (len(files) > 0)
+    return len(files) > 0
 
 
 def get_file_id_by_name(service, file_name, folder_id):
@@ -174,19 +174,23 @@ def get_file_link(service, folder_id, file_name):
 
 def find_previous_docs(service, folder_id):
     query = f"'{folder_id}' in parents and trashed = false"
-    request = (service.files().list(
-        q=query,
-        spaces="drive",
-        fields="files(name, createdTime)",
-        orderBy="createdTime desc",
-        pageSize=10,
-    ).execute())
+    request = (
+        service.files()
+        .list(
+            q=query,
+            spaces="drive",
+            fields="files(name, createdTime)",
+            orderBy="createdTime desc",
+            pageSize=10,
+        )
+        .execute()
+    )
     files = request.get("files", [])
 
     output_dict = {}
 
     for file in files:
-        file_name = file['name']
+        file_name = file["name"]
         output_dict[file_name] = get_file_link(service, folder_id, file_name)
 
     return output_dict
