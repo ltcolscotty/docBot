@@ -45,7 +45,13 @@ def file_exists(service, file_name, folder_id):
         .execute()
     )
     files = results.get("files", [])
-    return not (len(files) > 0)
+
+    if (len(files) > 0):
+        print("Files Found")
+    else:
+        print("Files not found")
+
+    return (len(files) > 0)
 
 
 def get_file_id_by_name(service, file_name, folder_id):

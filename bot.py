@@ -88,7 +88,7 @@ async def doc_update(interaction: discord.Interaction):
     description="Lists out previous transparency reports",
     guild=discord.Object(id=doc_config.guild_id),
 )
-async def announcement_set(interaction: discord.Interaction, title: str, text: str):
+async def announcement_set(interaction: discord.Interaction, title: str = "", text: str = ""):
     initial_embed = discord.Embed(
         title="Announcement Set",
         description="Command recieved! Processing updates...",
