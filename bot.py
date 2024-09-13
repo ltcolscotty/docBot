@@ -81,6 +81,8 @@ async def doc_update(interaction: discord.Interaction):
 
     await original_message.edit(embed=updated_embed)
 
+    
+
 
 @tree.command(
     name="previous-reports",
