@@ -10,3 +10,30 @@ mod_group = 5649380
 guild_id = 996319065679331348
 sdm_role_name = "TestRole2"
 dm_role_name = "TestRole1"
+
+# Document Config
+holder_list = [
+    "quarterholder",
+    "yearholder",
+    "announcementTitleHolder",
+    "announcentHolder",
+    "ginfractionCount",
+    "gwarnholder",
+    "gkickholder",
+    "gbanholder",
+    "gameappealholder",
+    "gaaholder",
+    "dwarnholder",
+    "dmuteholder",
+    "dkickholder",
+    "dbanholder",
+    "discordappealholder",
+    "daaholder",
+    "bomCount",
+    "admCount",
+    "supCount",
+    "sgmCount",
+    "sdmCount",
+    "gmCount",
+    "dmCount",
+]
