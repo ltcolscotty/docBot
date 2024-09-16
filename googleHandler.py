@@ -196,6 +196,10 @@ def find_previous_docs(service, folder_id):
     return output_dict
 
 
+def move_file(service, file_name, start_folder, destination_folder):
+    pass
+
+
 def make_announcement(document_id, title="", content=""):
     replace_text(document_id, "announcementTitleHolder", title)
     replace_text(document_id, "announcementHolder", content)

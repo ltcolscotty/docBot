@@ -171,7 +171,7 @@ async def publishDoc(interaction: discord.Interaction):
 
     setting_embed = discord.Embed(
         title="Publishing Document",
-        description="Command recieved! Getting link...",
+        description="Command recieved! Transferring folder...",
         color=discord.Color.red(),
     )
 
