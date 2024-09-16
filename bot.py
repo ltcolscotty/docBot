@@ -142,6 +142,36 @@ async def list_docs(interaction: discord.Interaction):
     print("Responded to list command!")
 
 
+@tree.command(
+    name="publish-quarter",
+    description="Sets to visible. announcements must be manually added after publishing",
+    guild=discord.Object(id=doc_config.guild_id),
+)
+async def publishDoc(interaction: discord.Interaction):
+    """
+    Tasks:
+    - Clean up holder text
+    - Move document to new folder
+    - Return link in response
+    """
+    print("Publish command called!")
+    initial_embed = discord.Embed(
+        title="Publishing Document",
+        description="Command recieved! Cleaning up placeholders...",
+        color=discord.Color.red(),
+    )
+    await interaction.response.send_message(embed=initial_embed)
+    original_message = await interaction.original_response()
+    setting_embed = discord.Embed(
+        title="Publishing Document",
+        description="Command recieved! Getting link...",
+        color=discord.Color.red(),
+    )
+
+
+
+
+
 @client.event
 async def on_message(message: discord.Message):
     if message.author == client.user:
