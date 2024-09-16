@@ -201,5 +201,10 @@ def move_file(service, file_name, start_folder, destination_folder):
 
 
 def make_announcement(document_id, title="", content=""):
+    """
+    TODO:
+    - add new announcementTitleHolder on a new line in bold
+    - add a new announcementHolder in a line below
+    """
     replace_text(document_id, "announcementTitleHolder", title)
     replace_text(document_id, "announcementHolder", content)
