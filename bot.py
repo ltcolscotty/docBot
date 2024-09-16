@@ -162,14 +162,18 @@ async def publishDoc(interaction: discord.Interaction):
     )
     await interaction.response.send_message(embed=initial_embed)
     original_message = await interaction.original_response()
+    
+    cur_name = quarterHandler.make_file_name()
+    id = googleHandler.get_file_id_by_name(googleHandler.drive_service, cur_name, doc_config.folder_id)
+
+    for holder in doc_config.holder_list:
+        googleHandler.replace_text(id, holder, "")
+
     setting_embed = discord.Embed(
         title="Publishing Document",
         description="Command recieved! Getting link...",
         color=discord.Color.red(),
     )
-
-
-
 
 
 @client.event
