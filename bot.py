@@ -179,13 +179,15 @@ async def publishDoc(interaction: discord.Interaction):
     description="Toggles visibility of the document to the public",
     guild=discord.Object(id=doc_config.guild_id),
 )
-async def toggle_location(interaction: discord.Interaction, file_name):
+async def toggle_location(interaction: discord.Interaction, file_name: str):
     if googleHandler.file_exists(file_name, doc_config.folder_id):
         pass
     elif googleHandler.file_exists(file_name, doc_config.share_folder_id):
         googleHandler.move_file(
             file_name, doc_config.share_folder_id, doc_config.folder_id
         )
+    else:
+        pass
 
 
 @client.event

@@ -126,13 +126,13 @@ async def run_doc_update(dm_count, sdm_count):
     cur_quarter_name = quarterHandler.make_file_name()
     print(f"Running: {cur_quarter_name}")
 
-    if not file_exists(drive_service, cur_quarter_name, doc_config.folder_id):
-        cloned_doc = clone_document(drive_service, file_id, cur_quarter_name)
+    if not file_exists(cur_quarter_name, doc_config.folder_id):
+        cloned_doc = clone_document(file_id, cur_quarter_name)
         print(f'Cloned document ID: {cloned_doc["id"]}')
 
     time_info = quarterHandler.get_time_info()
     document_id = get_file_id_by_name(
-        drive_service, cur_quarter_name, doc_config.folder_id
+        cur_quarter_name, doc_config.folder_id
     )
     roles = await robloxHandler.get_role_count(doc_config.mod_group)
 
