@@ -69,9 +69,7 @@ async def doc_update(interaction: discord.Interaction):
     dm_count = await get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
     await googleHandler.run_doc_update(dm_count, sdm_count)
     name = quarterHandler.make_file_name()
-    link = googleHandler.get_file_link(
-        doc_config.folder_id, name
-    )
+    link = googleHandler.get_file_link(doc_config.folder_id, name)
 
     updated_embed = discord.Embed(
         title="Transparency Report Request",
@@ -99,9 +97,7 @@ async def announcement_set(
     original_message = await interaction.original_response()
     print("Recieved announcement set")
     cur_file = quarterHandler.make_file_name()
-    file_id = googleHandler.get_file_id_by_name(
-        cur_file, doc_config.folder_id
-    )
+    file_id = googleHandler.get_file_id_by_name(cur_file, doc_config.folder_id)
     googleHandler.make_announcement(file_id, title, text)
     print(f"Updated: {cur_file}")
     updated_embed = discord.Embed(
@@ -126,12 +122,8 @@ async def list_docs(interaction: discord.Interaction):
     )
     await interaction.response.send_message(embed=initial_embed)
 
-    previous_private = googleHandler.find_previous_docs(
-        doc_config.folder_id
-    )
-    previous_public = googleHandler.find_previous_docs(
-        doc_config.share_folder_id
-    )
+    previous_private = googleHandler.find_previous_docs(doc_config.folder_id)
+    previous_public = googleHandler.find_previous_docs(doc_config.share_folder_id)
 
     previous = previous_private.update(previous_public)
 
@@ -170,9 +162,7 @@ async def publishDoc(interaction: discord.Interaction):
     original_message = await interaction.original_response()
 
     cur_name = quarterHandler.make_file_name()
-    id = googleHandler.get_file_id_by_name(
-        cur_name, doc_config.folder_id
-    )
+    id = googleHandler.get_file_id_by_name(cur_name, doc_config.folder_id)
 
     for holder in doc_config.holder_list:
         googleHandler.replace_text(id, holder, "")
@@ -193,7 +183,10 @@ async def toggle_location(interaction: discord.Interaction, file_name):
     if googleHandler.file_exists(file_name, doc_config.folder_id):
         pass
     elif googleHandler.file_exists(file_name, doc_config.share_folder_id):
-        googleHandler.move_file(file_name, doc_config.share_folder_id, doc_config.folder_id)
+        googleHandler.move_file(
+            file_name, doc_config.share_folder_id, doc_config.folder_id
+        )
+
 
 @client.event
 async def on_message(message: discord.Message):

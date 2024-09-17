@@ -241,7 +241,7 @@ def move_file(file_name, start_folder, destination_folder):
     except HttpError as error:
         print(f"An error occurred: {error}")
         return None
-    
+
 
 def document_search(file_name):
     """
@@ -250,9 +250,9 @@ def document_search(file_name):
     Returns:
         - folder_id: String
     """
-    if (search_file_in_folder(doc_config.folder_id, file_name) is not None):
+    if search_file_in_folder(doc_config.folder_id, file_name) is not None:
         return doc_config.folder_id
-    elif (search_file_in_folder(doc_config.share_folder_id, file_name) is not None):
+    elif search_file_in_folder(doc_config.share_folder_id, file_name) is not None:
         return doc_config.share_folder_id
     else:
         return None
@@ -274,13 +274,13 @@ def check_string_in_doc(document_id, search_string):
     doc = service.documents().get(documentId=document_id).execute()
 
     # Extract text from the document
-    document_content = doc.get('body').get('content')
-    text = ''
+    document_content = doc.get("body").get("content")
+    text = ""
     for element in document_content:
-        if 'paragraph' in element:
-            for paragraph_element in element['paragraph']['elements']:
-                if 'textRun' in paragraph_element:
-                    text += paragraph_element['textRun']['content']
+        if "paragraph" in element:
+            for paragraph_element in element["paragraph"]["elements"]:
+                if "textRun" in paragraph_element:
+                    text += paragraph_element["textRun"]["content"]
 
     # Check if the search string exists in the extracted text
     if search_string in text:
@@ -292,16 +292,16 @@ def check_string_in_doc(document_id, search_string):
 def search_file_in_folder(folder_id, file_name):
     query = f"'{folder_id}' in parents and name = '{file_name}'"
     service = drive_service
-    
+
     try:
-        results = service.files().list(
-            q=query,
-            spaces='drive',
-            fields='files(id, name, mimeType)'
-        ).execute()
-        
-        files = results.get('files', [])
-        
+        results = (
+            service.files()
+            .list(q=query, spaces="drive", fields="files(id, name, mimeType)")
+            .execute()
+        )
+
+        files = results.get("files", [])
+
         if not files:
             print(f"No file named '{file_name}' found in the specified folder.")
             return None
