@@ -33,12 +33,24 @@ docs_service = build("docs", "v1", credentials=credentials)
 
 # Define functions
 def clone_document(file_id, new_title):
+    """
+    Args:
+        - file_id: String - target ID
+        - new_title: String - name of new document
+    """
     service = drive_service
     copied_file = {"name": new_title, "parents": [folder_id]}
     return service.files().copy(fileId=file_id, body=copied_file).execute()
 
 
 def file_exists(file_name, folder_id):
+    """
+    Args:
+        - file_name: String - name of file
+        - folder_id: folder to search
+    Returns:
+        - boolean: file exists in folder
+    """
     service = drive_service
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     results = (
@@ -155,6 +167,13 @@ async def run_doc_update(dm_count, sdm_count):
 
 
 def get_file_link(folder_id, file_name):
+    """
+    Args:
+        - folder_id: String - target folder for search
+        - file_name: String - file name
+    Returns:
+        - link of file_name file
+    """
     service = drive_service
     # Search for the file in the specified folder
     query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
@@ -177,6 +196,12 @@ def get_file_link(folder_id, file_name):
 
 
 def find_previous_docs(folder_id):
+    """
+    Args:
+        - folder_id: String - target folder ID
+    Returns:
+        - dictionary: {document_name, file_link}
+    """
     service = drive_service
     query = f"'{folder_id}' in parents and trashed = false"
     request = (
@@ -202,6 +227,12 @@ def find_previous_docs(folder_id):
 
 
 def move_file(file_name, start_folder, destination_folder):
+    """
+    Args:
+    - file_name: String - Target file name
+    - start_folder: String - source folder ID
+    - destination_folder: String - destination folder ID
+    """
     service = drive_service
     try:
         # Search for the file in the source folder
@@ -269,6 +300,13 @@ def make_announcement(document_id, title="", content=""):
 
 
 def check_string_in_doc(document_id, search_string):
+    """
+    Args:
+    - document_id: String target document ID
+    - search_string: target string
+    Returns:
+    - Boolean: does string exist in the document
+    """
     service = docs_service
     # Retrieve the document content
     doc = service.documents().get(documentId=document_id).execute()
@@ -283,10 +321,7 @@ def check_string_in_doc(document_id, search_string):
                     text += paragraph_element["textRun"]["content"]
 
     # Check if the search string exists in the extracted text
-    if search_string in text:
-        print(f"The string '{search_string}' was found in the document.")
-    else:
-        print(f"The string '{search_string}' was not found in the document.")
+    return search_string in text
 
 
 def search_file_in_folder(folder_id, file_name):
