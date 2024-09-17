@@ -32,12 +32,14 @@ docs_service = build("docs", "v1", credentials=credentials)
 
 
 # Define functions
-def clone_document(service, file_id, new_title):
+def clone_document(file_id, new_title):
+    service = drive_service
     copied_file = {"name": new_title, "parents": [folder_id]}
     return service.files().copy(fileId=file_id, body=copied_file).execute()
 
 
-def file_exists(service, file_name, folder_id):
+def file_exists(file_name, folder_id):
+    service = drive_service
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     results = (
         service.files()
@@ -54,11 +56,12 @@ def file_exists(service, file_name, folder_id):
     return len(files) > 0
 
 
-def get_file_id_by_name(service, file_name, folder_id):
+def get_file_id_by_name(file_name, folder_id):
     """
     Should be run in conjunction with file_exists
     """
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
+    service = drive_service
 
     try:
         results = (
@@ -151,7 +154,8 @@ async def run_doc_update(dm_count, sdm_count):
     print("Finished Update")
 
 
-def get_file_link(service, folder_id, file_name):
+def get_file_link(folder_id, file_name):
+    service = drive_service
     # Search for the file in the specified folder
     query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
     results = (
@@ -172,7 +176,8 @@ def get_file_link(service, folder_id, file_name):
     return file.get("webViewLink")
 
 
-def find_previous_docs(service, folder_id):
+def find_previous_docs(folder_id):
+    service = drive_service
     query = f"'{folder_id}' in parents and trashed = false"
     request = (
         service.files()
@@ -196,7 +201,8 @@ def find_previous_docs(service, folder_id):
     return output_dict
 
 
-def move_file(service, file_name, start_folder, destination_folder):
+def move_file(file_name, start_folder, destination_folder):
+    service = drive_service
     try:
         # Search for the file in the source folder
         query = (
@@ -235,6 +241,10 @@ def move_file(service, file_name, start_folder, destination_folder):
     except HttpError as error:
         print(f"An error occurred: {error}")
         return None
+    
+
+def document_search(file_name):
+    service = drive_service
 
 
 def make_announcement(document_id, title="", content=""):
@@ -247,8 +257,8 @@ def make_announcement(document_id, title="", content=""):
     replace_text(document_id, "announcementHolder", content)
 
 
-def check_string_in_doc(service, document_id, search_string):
-
+def check_string_in_doc(document_id, search_string):
+    service = docs_service
     # Retrieve the document content
     doc = service.documents().get(documentId=document_id).execute()
 
@@ -266,3 +276,27 @@ def check_string_in_doc(service, document_id, search_string):
         print(f"The string '{search_string}' was found in the document.")
     else:
         print(f"The string '{search_string}' was not found in the document.")
+
+
+def search_file_in_folder(folder_id, file_name):
+    query = f"'{folder_id}' in parents and name = '{file_name}'"
+    service = drive_service
+    
+    try:
+        results = service.files().list(
+            q=query,
+            spaces='drive',
+            fields='files(id, name, mimeType)'
+        ).execute()
+        
+        files = results.get('files', [])
+        
+        if not files:
+            print(f"No file named '{file_name}' found in the specified folder.")
+            return None
+        else:
+            print(f"File found: {files[0]['name']} (ID: {files[0]['id']})")
+            return files[0]
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None
