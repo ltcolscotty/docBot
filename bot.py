@@ -224,8 +224,20 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
         googleHandler.move_file(
             file_name, doc_config.share_folder_id, doc_config.folder_id
         )
+        notif_embed = discord.Embed(
+                title="Toggle Document Location",
+                description="Document location is toggled.",
+                color=discord.Color.green()
+            )
+        original_message.edit(embed=notif_embed)
     else:
-        pass
+        notif_embed = discord.Embed(
+                title="Toggle Document Location",
+                description="Error: Document not found",
+                color=discord.Color.yellow()
+            )
+        original_message.edit(embed=notif_embed)
+        
 
 
 @client.event
