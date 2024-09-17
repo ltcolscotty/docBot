@@ -244,7 +244,18 @@ def move_file(file_name, start_folder, destination_folder):
     
 
 def document_search(file_name):
-    service = drive_service
+    """
+    Args:
+        - file_name: String
+    Returns:
+        - folder_id: String
+    """
+    if (search_file_in_folder(doc_config.folder_id, file_name) is not None):
+        return doc_config.folder_id
+    elif (search_file_in_folder(doc_config.share_folder_id, file_name) is not None):
+        return doc_config.share_folder_id
+    else:
+        return None
 
 
 def make_announcement(document_id, title="", content=""):
