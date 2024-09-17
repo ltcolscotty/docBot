@@ -245,3 +245,24 @@ def make_announcement(document_id, title="", content=""):
     """
     replace_text(document_id, "announcementTitleHolder", title)
     replace_text(document_id, "announcementHolder", content)
+
+
+def check_string_in_doc(service, document_id, search_string):
+
+    # Retrieve the document content
+    doc = service.documents().get(documentId=document_id).execute()
+
+    # Extract text from the document
+    document_content = doc.get('body').get('content')
+    text = ''
+    for element in document_content:
+        if 'paragraph' in element:
+            for paragraph_element in element['paragraph']['elements']:
+                if 'textRun' in paragraph_element:
+                    text += paragraph_element['textRun']['content']
+
+    # Check if the search string exists in the extracted text
+    if search_string in text:
+        print(f"The string '{search_string}' was found in the document.")
+    else:
+        print(f"The string '{search_string}' was not found in the document.")
