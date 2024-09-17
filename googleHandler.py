@@ -197,7 +197,44 @@ def find_previous_docs(service, folder_id):
 
 
 def move_file(service, file_name, start_folder, destination_folder):
-    pass
+    try:
+        # Search for the file in the source folder
+        query = (
+            f"name = '{file_name}' and '{start_folder}' in parents and trashed = false"
+        )
+        results = (
+            service.files()
+            .list(q=query, spaces="drive", fields="files(id, name)")
+            .execute()
+        )
+        files = results.get("files", [])
+
+        if not files:
+            print(f"File '{file_name}' not found in the specified folder.")
+            return None
+
+        file_id = files[0]["id"]
+
+        # Move the file to the new folder
+        file = (
+            service.files()
+            .update(
+                fileId=file_id,
+                addParents=destination_folder,
+                removeParents=start_folder,
+                fields="id, parents",
+            )
+            .execute()
+        )
+
+        print(
+            f"File '{file_name}' (ID: {file_id}) moved to folder with ID: {destination_folder}"
+        )
+        return file.get("parents")
+
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return None
 
 
 def make_announcement(document_id, title="", content=""):
