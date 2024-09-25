@@ -61,9 +61,9 @@ def file_exists(file_name, folder_id):
     files = results.get("files", [])
 
     if len(files) > 0:
-        print("Files Found")
+        print(f"Files Found in folder: {folder_id}")
     else:
-        print("Files not found")
+        print(f"Files not found in folder: {folder_id}")
 
     return len(files) > 0
 
