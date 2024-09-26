@@ -208,19 +208,31 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
     original_message = await interaction.original_response()
 
     folder_id = googleHandler.document_search(file_name)
-    doc_id = googleHandler.get_file_id_by_name(file_name, folder_id)
 
-    if googleHandler.file_exists(file_name, doc_config.folder_id):
-        if googleHandler.check_string_in_doc(doc_id, "Unpublished"):
-            notif_embed = discord.Embed(
-                title="Toggle Document Location",
-                description="Document is unpublished, run /publish-quarter to publish.",
-                color=discord.Color.yellow(),
-            )
-            await original_message.edit(embed=notif_embed)
-        else:
+    if folder_id is not None:
+        doc_id = googleHandler.get_file_id_by_name(file_name, folder_id)
+
+        if folder_id == doc_config.folder_id:
+            if googleHandler.check_string_in_doc(doc_id, "Unpublished"):
+                notif_embed = discord.Embed(
+                    title="Toggle Document Location",
+                    description="Document is unpublished, run /publish-quarter to publish.",
+                    color=discord.Color.yellow(),
+                )
+                await original_message.edit(embed=notif_embed)
+            else:
+                googleHandler.move_file(
+                    file_name, doc_config.folder_id, doc_config.share_folder_id
+                )
+                notif_embed = discord.Embed(
+                    title="Toggle Document Location",
+                    description="Document location is toggled.",
+                    color=discord.Color.green(),
+                )
+                await original_message.edit(embed=notif_embed)
+        elif folder_id == doc_config.share_folder_id:
             googleHandler.move_file(
-                file_name, doc_config.folder_id, doc_config.share_folder_id
+                file_name, doc_config.share_folder_id, doc_config.folder_id
             )
             notif_embed = discord.Embed(
                 title="Toggle Document Location",
@@ -228,21 +240,19 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
                 color=discord.Color.green(),
             )
             await original_message.edit(embed=notif_embed)
-    elif googleHandler.file_exists(file_name, doc_config.share_folder_id):
-        googleHandler.move_file(
-            file_name, doc_config.share_folder_id, doc_config.folder_id
-        )
-        notif_embed = discord.Embed(
-            title="Toggle Document Location",
-            description="Document location is toggled.",
-            color=discord.Color.green(),
-        )
-        await original_message.edit(embed=notif_embed)
+        else:
+            notif_embed = discord.Embed(
+                title="Toggle Document Location",
+                description="Error: Document not found. This error should not happen.",
+                color=discord.Color.yellow(),
+            )
+            await original_message.edit(embed=notif_embed)
+
     else:
         notif_embed = discord.Embed(
-            title="Toggle Document Location",
-            description="Error: Document not found",
-            color=discord.Color.yellow(),
+                title="Toggle Document Location",
+                description="Error: Document not found. No Files Changed.",
+                color=discord.Color.yellow(),
         )
         await original_message.edit(embed=notif_embed)
 
