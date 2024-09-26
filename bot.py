@@ -164,21 +164,33 @@ async def publishDoc(interaction: discord.Interaction):
     original_message = await interaction.original_response()
 
     cur_name = quarterHandler.make_file_name()
-    id = googleHandler.get_file_id_by_name(cur_name, doc_config.folder_id)
 
-    for holder in doc_config.holder_list:
-        googleHandler.replace_text(id, holder, "N/A")
-
-    googleHandler.replace_text(id, "Unpublished", "Published")
-
-    setting_embed = discord.Embed(
-        title="Publishing Document",
-        description="Command recieved! Transferring folder...",
-        color=discord.Color.yellow(),
-    )
-    await original_message.edit(embed=setting_embed)
     try:
+        id = googleHandler.get_file_id_by_name(cur_name, doc_config.folder_id)
+
+        for holder in doc_config.holder_list:
+            googleHandler.replace_text(id, holder, "N/A")
+
+        googleHandler.replace_text(id, "Unpublished", "Published")
+
+        setting_embed = discord.Embed(
+            title="Publishing Document",
+            description="Command recieved! Transferring folder...",
+            color=discord.Color.yellow(),
+        )
+        await original_message.edit(embed=setting_embed)
+
         googleHandler.move_file(cur_name, doc_config.folder_id, doc_config.share_folder_id)
+
+        link = googleHandler.get_file_link(doc_config.share_folder_id, cur_name)
+
+        setting_embed = discord.Embed(
+            title="Publishing Document",
+            description=f"Document has been published at: {link}",
+            color=discord.Color.green(),
+        )
+        await original_message.edit(embed=setting_embed)
+
     except HttpError:
         setting_embed = discord.Embed(
             title="Publishing Document",
@@ -186,15 +198,6 @@ async def publishDoc(interaction: discord.Interaction):
             color=discord.Color.red(),
         )
         await original_message.edit(embed=setting_embed)
-
-    link = googleHandler.get_file_link(doc_config.share_folder_id, cur_name)
-
-    setting_embed = discord.Embed(
-        title="Publishing Document",
-        description=f"Document has been published at: {link}",
-        color=discord.Color.green(),
-    )
-    await original_message.edit(embed=setting_embed)
 
 
 @tree.command(
