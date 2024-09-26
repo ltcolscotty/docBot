@@ -148,18 +148,18 @@ async def run_doc_update(dm_count, sdm_count):
 
     # make changes
     print("Updating GMT Counts")
-    result = replace_text(document_id, "quarterholder", time_info[0])
-    result = replace_text(document_id, "yearholder", str(time_info[1]))
-    result = replace_text(document_id, "bomCount", str(roles["Board of Moderation"]))
-    result = replace_text(document_id, "admCount", str(roles["Administrator"]))
-    result = replace_text(document_id, "supCount", str(roles["Supervisor"]))
-    result = replace_text(document_id, "sgmCount", str(roles["Senior Moderator"]))
-    result = replace_text(document_id, "gmCount", str(roles["Moderator"]))
+    replace_text(document_id, "quarterholder", time_info[0])
+    replace_text(document_id, "yearholder", str(time_info[1]))
+    replace_text(document_id, "bomCount", str(roles["Board of Moderation"]))
+    replace_text(document_id, "admCount", str(roles["Administrator"]))
+    replace_text(document_id, "supCount", str(roles["Supervisor"]))
+    replace_text(document_id, "sgmCount", str(roles["Senior Moderator"]))
+    replace_text(document_id, "gmCount", str(roles["Moderator"]))
 
     print("Updating DMT Counts")
 
-    result = replace_text(document_id, "sdmCount", str(sdm_count[0]))
-    result = replace_text(document_id, "dmCount", str(dm_count[0]))
+    replace_text(document_id, "sdmCount", str(sdm_count[0]))
+    replace_text(document_id, "dmCount", str(dm_count[0]))
 
     print("Finished Update")
 
