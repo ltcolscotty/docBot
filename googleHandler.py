@@ -143,9 +143,7 @@ async def run_doc_update(dm_count, sdm_count):
         print(f'Cloned document ID: {cloned_doc["id"]}')
 
     time_info = quarterHandler.get_time_info()
-    document_id = get_file_id_by_name(
-        cur_quarter_name, doc_config.folder_id
-    )
+    document_id = get_file_id_by_name(cur_quarter_name, doc_config.folder_id)
     roles = await robloxHandler.get_role_count(doc_config.mod_group)
 
     # make changes

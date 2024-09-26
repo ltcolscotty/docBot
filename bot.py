@@ -175,7 +175,7 @@ async def publishDoc(interaction: discord.Interaction):
         color=discord.Color.red(),
     )
     await original_message.edit(embed=setting_embed)
-    
+
     googleHandler.move_file(cur_name, doc_config.folder_id, doc_config.share_folder_id)
 
     link = googleHandler.get_file_link(doc_config.share_folder_id, cur_name)
@@ -183,7 +183,7 @@ async def publishDoc(interaction: discord.Interaction):
     setting_embed = discord.Embed(
         title="Publishing Document",
         description=f"Document has been published at: {link}",
-        color=discord.Color.green()
+        color=discord.Color.green(),
     )
     await original_message.edit(embed=setting_embed)
 
@@ -215,17 +215,17 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
             notif_embed = discord.Embed(
                 title="Toggle Document Location",
                 description="Document is unpublished, run /publish-quarter to publish.",
-                color=discord.Color.yellow()
+                color=discord.Color.yellow(),
             )
             await original_message.edit(embed=notif_embed)
         else:
             googleHandler.move_file(
-            file_name, doc_config.folder_id, doc_config.share_folder_id
+                file_name, doc_config.folder_id, doc_config.share_folder_id
             )
             notif_embed = discord.Embed(
                 title="Toggle Document Location",
                 description="Document location is toggled.",
-                color=discord.Color.green()
+                color=discord.Color.green(),
             )
             await original_message.edit(embed=notif_embed)
     elif googleHandler.file_exists(file_name, doc_config.share_folder_id):
@@ -233,19 +233,18 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
             file_name, doc_config.share_folder_id, doc_config.folder_id
         )
         notif_embed = discord.Embed(
-                title="Toggle Document Location",
-                description="Document location is toggled.",
-                color=discord.Color.green()
-            )
+            title="Toggle Document Location",
+            description="Document location is toggled.",
+            color=discord.Color.green(),
+        )
         await original_message.edit(embed=notif_embed)
     else:
         notif_embed = discord.Embed(
-                title="Toggle Document Location",
-                description="Error: Document not found",
-                color=discord.Color.yellow()
-            )
+            title="Toggle Document Location",
+            description="Error: Document not found",
+            color=discord.Color.yellow(),
+        )
         await original_message.edit(embed=notif_embed)
-        
 
 
 @client.event
