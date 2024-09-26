@@ -9,6 +9,8 @@ import doc_config
 import googleHandler
 import quarterHandler
 
+from googleapiclient.errors import HttpError
+
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
@@ -58,7 +60,7 @@ async def doc_update(interaction: discord.Interaction):
     initial_embed = discord.Embed(
         title="Transparency Report Request",
         description="Command recieved! Processing updates...",
-        color=discord.Color.red(),
+        color=discord.Color.yellow(),
     )
 
     await interaction.response.send_message(embed=initial_embed)
@@ -91,7 +93,7 @@ async def announcement_set(
     initial_embed = discord.Embed(
         title="Announcement Set",
         description="Command recieved! Processing updates...",
-        color=discord.Color.red(),
+        color=discord.Color.yellow(),
     )
     await interaction.response.send_message(embed=initial_embed)
     original_message = await interaction.original_response()
@@ -118,7 +120,7 @@ async def list_docs(interaction: discord.Interaction):
     initial_embed = discord.Embed(
         title="Transparency Report List",
         description="Command recieved! Searching for documents...",
-        color=discord.Color.red(),
+        color=discord.Color.yellow(),
     )
     await interaction.response.send_message(embed=initial_embed)
 
@@ -156,7 +158,7 @@ async def publishDoc(interaction: discord.Interaction):
     initial_embed = discord.Embed(
         title="Publishing Document",
         description="Command recieved! Cleaning up placeholders...",
-        color=discord.Color.red(),
+        color=discord.Color.yellow(),
     )
     await interaction.response.send_message(embed=initial_embed)
     original_message = await interaction.original_response()
@@ -172,11 +174,18 @@ async def publishDoc(interaction: discord.Interaction):
     setting_embed = discord.Embed(
         title="Publishing Document",
         description="Command recieved! Transferring folder...",
-        color=discord.Color.red(),
+        color=discord.Color.yellow(),
     )
     await original_message.edit(embed=setting_embed)
-
-    googleHandler.move_file(cur_name, doc_config.folder_id, doc_config.share_folder_id)
+    try:
+        googleHandler.move_file(cur_name, doc_config.folder_id, doc_config.share_folder_id)
+    except HttpError:
+        setting_embed = discord.Embed(
+            title="Publishing Document",
+            description="HTTP Error: File not moved",
+            color=discord.Color.red(),
+        )
+        await original_message.edit(embed=setting_embed)
 
     link = googleHandler.get_file_link(doc_config.share_folder_id, cur_name)
 
@@ -201,7 +210,7 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
     initial_embed = discord.Embed(
         title="Toggle Document Location",
         description="Command recieved! Verifying publish status...",
-        color=discord.Color.red(),
+        color=discord.Color.yellow(),
     )
     await interaction.response.send_message(embed=initial_embed)
     original_message = await interaction.original_response()
@@ -216,7 +225,7 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
                 notif_embed = discord.Embed(
                     title="Toggle Document Location",
                     description="Document is unpublished, run /publish-quarter to publish.",
-                    color=discord.Color.yellow(),
+                    color=discord.Color.red(),
                 )
                 await original_message.edit(embed=notif_embed)
             else:
@@ -243,7 +252,7 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
             notif_embed = discord.Embed(
                 title="Toggle Document Location",
                 description="Error: Document not found. This error should not happen.",
-                color=discord.Color.yellow(),
+                color=discord.Color.red(),
             )
             await original_message.edit(embed=notif_embed)
 
@@ -251,7 +260,7 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
         notif_embed = discord.Embed(
                 title="Toggle Document Location",
                 description="Error: Document not found. No Files Changed.",
-                color=discord.Color.yellow(),
+                color=discord.Color.red(),
         )
         await original_message.edit(embed=notif_embed)
 
