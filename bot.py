@@ -195,8 +195,7 @@ async def publishDoc(interaction: discord.Interaction):
 )
 async def toggle_location(interaction: discord.Interaction, file_name: str):
     """
-    TODO:
-    - May be able to restructure this around document_search() from googleHandler to simplify
+    Handles moving files from public to private and vice versa
     """
     print("Toggle command called!")
     initial_embed = discord.Embed(
