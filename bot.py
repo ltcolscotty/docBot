@@ -99,15 +99,29 @@ async def announcement_set(
     original_message = await interaction.original_response()
     print("Recieved announcement set")
     cur_file = quarterHandler.make_file_name()
-    file_id = googleHandler.get_file_id_by_name(cur_file, doc_config.folder_id)
-    googleHandler.make_announcement(file_id, title, text)
-    print(f"Updated: {cur_file}")
-    updated_embed = discord.Embed(
-        title=f"Announcement Set: {cur_file}",
-        description=(f"{title}: {text}"),
-        color=discord.Color.green(),
-    )
-    await original_message.edit(embed=updated_embed)
+
+    try:
+        file_id = googleHandler.get_file_id_by_name(cur_file, doc_config.folder_id)
+
+        if file_id is not None:
+
+            googleHandler.make_announcement(file_id, title, text)
+
+            print(f"Updated: {cur_file}")
+
+            updated_embed = discord.Embed(
+                title=f"Announcement Set: {cur_file}",
+                description=(f"{title}: {text}"),
+                color=discord.Color.green(),
+            )
+            await original_message.edit(embed=updated_embed)
+    except HttpError:
+        setting_embed = discord.Embed(
+            title="Publishing Document",
+            description="HTTP Error; No action taken",
+            color=discord.Color.red(),
+        )
+        await original_message.edit(embed=setting_embed)
 
 
 @tree.command(
@@ -180,7 +194,9 @@ async def publishDoc(interaction: discord.Interaction):
         )
         await original_message.edit(embed=setting_embed)
 
-        googleHandler.move_file(cur_name, doc_config.folder_id, doc_config.share_folder_id)
+        googleHandler.move_file(
+            cur_name, doc_config.folder_id, doc_config.share_folder_id
+        )
 
         link = googleHandler.get_file_link(doc_config.share_folder_id, cur_name)
 
@@ -261,9 +277,9 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
 
     else:
         notif_embed = discord.Embed(
-                title="Toggle Document Location",
-                description="Error: Document not found. No Files Changed.",
-                color=discord.Color.red(),
+            title="Toggle Document Location",
+            description="Error: Document not found. No Files Changed.",
+            color=discord.Color.red(),
         )
         await original_message.edit(embed=notif_embed)
 
