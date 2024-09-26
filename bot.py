@@ -37,8 +37,8 @@ async def on_ready():
 
 
 @tree.command(
-    name="doc-clone",
-    description="clones template doc",
+    name="test-command",
+    description="test bot response",
     guild=discord.Object(id=doc_config.guild_id),
 )
 async def doc_clone_command(interaction: discord.Interaction):
