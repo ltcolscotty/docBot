@@ -1,5 +1,5 @@
 """
-Tests
+Tests google handler
 """
 
 import pytest

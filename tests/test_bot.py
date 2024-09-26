@@ -1,0 +1,3 @@
+"""
+tests bot.py
+"""
