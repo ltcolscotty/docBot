@@ -141,7 +141,13 @@ async def list_docs(interaction: discord.Interaction):
     previous_private = googleHandler.find_previous_docs(doc_config.folder_id)
     previous_public = googleHandler.find_previous_docs(doc_config.share_folder_id)
 
-    previous = previous_private.update(previous_public)
+    if previous_private is None:
+        previous = previous_public
+    elif previous_public is None:
+        previous = previous_private
+    else:
+        previous = previous_private.copy()
+        previous.update(previous_public)
 
     original_message = await interaction.original_response()
     final_embed = discord.Embed(
@@ -150,7 +156,17 @@ async def list_docs(interaction: discord.Interaction):
     )
 
     for name in previous.keys():
-        final_embed.add_field(name=f"{name}", value=(f"{previous[name]}"), inline=False)
+        folder_id = googleHandler.document_search(name)
+        doc_id = googleHandler.get_file_id_by_name(name, folder_id)
+
+        if googleHandler.check_string_in_doc(doc_id, "Unpublished"):
+            pubStr = "Unpublished"
+        elif googleHandler.check_string_in_doc(doc_id, "Published"):
+            pubStr = "Published"
+        else:
+            pubStr = "Unknown"
+        
+        final_embed.add_field(name=f"{name}: {pubStr}", value=(f"{previous[name]}"), inline=False)
 
     await original_message.edit(embed=final_embed)
     print("Responded to list command!")

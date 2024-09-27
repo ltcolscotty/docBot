@@ -219,7 +219,7 @@ def find_previous_docs(folder_id):
 
     for file in files:
         file_name = file["name"]
-        output_dict[file_name] = get_file_link(service, folder_id, file_name)
+        output_dict[file_name] = get_file_link(folder_id, file_name)
 
     return output_dict
 
