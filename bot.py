@@ -165,8 +165,10 @@ async def list_docs(interaction: discord.Interaction):
             pubStr = "Published"
         else:
             pubStr = "Unknown"
-        
-        final_embed.add_field(name=f"{name}: {pubStr}", value=(f"{previous[name]}"), inline=False)
+
+        final_embed.add_field(
+            name=f"{name}: {pubStr}", value=(f"{previous[name]}"), inline=False
+        )
 
     await original_message.edit(embed=final_embed)
     print("Responded to list command!")
