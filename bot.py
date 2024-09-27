@@ -63,21 +63,28 @@ async def doc_update(interaction: discord.Interaction):
         color=discord.Color.yellow(),
     )
 
-    await interaction.response.send_message(embed=initial_embed)
-    original_message = await interaction.original_response()
-    sdm_count = await get_role_member_count(
-        doc_config.guild_id, doc_config.sdm_role_name
-    )
-    dm_count = await get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
-    await googleHandler.run_doc_update(dm_count, sdm_count)
-    name = quarterHandler.make_file_name()
-    link = googleHandler.get_file_link(doc_config.folder_id, name)
+    try:
+        await interaction.response.send_message(embed=initial_embed)
+        original_message = await interaction.original_response()
+        sdm_count = await get_role_member_count(
+            doc_config.guild_id, doc_config.sdm_role_name
+        )
+        dm_count = await get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
+        await googleHandler.run_doc_update(dm_count, sdm_count)
+        name = quarterHandler.make_file_name()
+        link = googleHandler.get_file_link(doc_config.folder_id, name)
 
-    updated_embed = discord.Embed(
-        title="Transparency Report Request",
-        description=(f"{name}: {link}"),
-        color=discord.Color.green(),
-    )
+        updated_embed = discord.Embed(
+            title="Transparency Report Request",
+            description=(f"{name}: {link}"),
+            color=discord.Color.green(),
+        )
+    except Exception:
+        updated_embed = discord.Embed(
+            title="Transparency Report Request",
+            description=("Exception occured. Check Error Stack."),
+            color=discord.Color.red(),
+        )
 
     await original_message.edit(embed=updated_embed)
 
