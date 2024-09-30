@@ -164,7 +164,7 @@ async def list_docs(interaction: discord.Interaction):
 
     try:
         for name in previous.keys():
-            folder_id = googleHandler.document_search(name)
+            folder_id = googleHandler.get_folder_from_docname(name)
             doc_id = googleHandler.get_file_id_by_name(name, folder_id)
 
             if googleHandler.check_string_in_doc(doc_id, "Unpublished"):
@@ -267,7 +267,7 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
     await interaction.response.send_message(embed=initial_embed)
     original_message = await interaction.original_response()
 
-    folder_id = googleHandler.document_search(file_name)
+    folder_id = googleHandler.get_folder_from_docname(file_name)
 
     if folder_id is not None:
         doc_id = googleHandler.get_file_id_by_name(file_name, folder_id)

@@ -272,7 +272,7 @@ def move_file(file_name, start_folder, destination_folder):
         return None
 
 
-def document_search(file_name):
+def get_folder_from_docname(file_name):
     """
     Args:
         - file_name: String
