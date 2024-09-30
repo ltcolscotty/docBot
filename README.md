@@ -13,3 +13,12 @@ Currently a work in progress to get the base concept working with additional fun
 
 ## Hidden files
 Standard files are hidden such as the .env folder containing the API key to the discord bot's functionality as well as keys/ which holds the API key to the google drive functionality. Pycache has also been hidden as it doesn't serve any functional purpose for deployment.
+
+## Commands
+
+``doc-update`` - Creates/Updates Document
+``announcement-set`` - Sets announcements
+    - TODO: Needs to revamp
+``previous-reports`` - lists out previous documents
+``publish-quarter`` - Prepares document and transfers it to the public folder
+``toggle-visibility`` - moves specified document to public/private folder
