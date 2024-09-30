@@ -32,7 +32,7 @@ docs_service = build("docs", "v1", credentials=credentials)
 
 
 # Define functions
-def clone_document(file_id, new_title):
+def clone_document(file_id: str, new_title: str):
     """
     Duplicates document and gives it a new title
     Args:
@@ -44,7 +44,7 @@ def clone_document(file_id, new_title):
     return service.files().copy(fileId=file_id, body=copied_file).execute()
 
 
-def file_exists(file_name, folder_id):
+def file_exists(file_name: str, folder_id: str):
     """
     Checks if file exists in folder
     TODO: Check if this is redundant and can be removed
@@ -71,7 +71,7 @@ def file_exists(file_name, folder_id):
     return len(files) > 0
 
 
-def get_file_id_by_name(file_name, folder_id):
+def get_file_id_by_name(file_name: str, folder_id: str):
     """
     Should be run in conjunction with file_exists
     Args:
@@ -109,7 +109,7 @@ def get_file_id_by_name(file_name, folder_id):
 
 
 # Docs service functions
-def replace_text(document_id, old_text: str, new_text: str):
+def replace_text(document_id: str, old_text: str, new_text: str):
     """
     replaces text in given document ID
     Args:
@@ -136,7 +136,7 @@ def replace_text(document_id, old_text: str, new_text: str):
     return result
 
 
-async def run_doc_update(dm_count, sdm_count):
+async def run_doc_update(dm_count: int, sdm_count: int):
     """
     Updates quarterly transparency report
 
@@ -177,7 +177,7 @@ async def run_doc_update(dm_count, sdm_count):
     print("Finished Update")
 
 
-def get_file_link(folder_id, file_name):
+def get_file_link(folder_id: str, file_name: str):
     """
     Gets file link based on folder_id and file_name
     Args:
@@ -207,7 +207,7 @@ def get_file_link(folder_id, file_name):
     return file.get("webViewLink")
 
 
-def find_previous_docs(folder_id):
+def find_previous_docs(folder_id: str):
     """
     lists out documents in a folder
     Args:
@@ -239,7 +239,7 @@ def find_previous_docs(folder_id):
     return output_dict
 
 
-def move_file(file_name, start_folder, destination_folder):
+def move_file(file_name: str, start_folder: str, destination_folder: str):
     """
     Moves file from start folder to destination folder
     Args:
@@ -288,7 +288,7 @@ def move_file(file_name, start_folder, destination_folder):
         return None
 
 
-def get_folder_from_docname(file_name):
+def get_folder_from_docname(file_name: str):
     """
     Returns a folder based on a document name that is given
     Args:
@@ -304,7 +304,7 @@ def get_folder_from_docname(file_name):
         return None
 
 
-def make_announcement(document_id, title="", content=""):
+def make_announcement(document_id: str, title: str ="", content: str =""):
     """
     TODO:
     - add new announcementTitleHolder on a new line in bold
@@ -314,7 +314,7 @@ def make_announcement(document_id, title="", content=""):
     replace_text(document_id, "announcementHolder", content)
 
 
-def check_string_in_doc(document_id, search_string):
+def check_string_in_doc(document_id: str, search_string: str):
     """
     Looks for a string in a document and returns true or false.
     Args:
@@ -340,7 +340,7 @@ def check_string_in_doc(document_id, search_string):
     return search_string in text
 
 
-def search_file_in_folder(folder_id, file_name):
+def search_file_in_folder(folder_id: str, file_name: str):
     """
     looks for a file in a folder
     Args:
