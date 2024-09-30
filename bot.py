@@ -162,23 +162,31 @@ async def list_docs(interaction: discord.Interaction):
         color=discord.Color.green(),
     )
 
-    for name in previous.keys():
-        folder_id = googleHandler.document_search(name)
-        doc_id = googleHandler.get_file_id_by_name(name, folder_id)
+    try:
+        for name in previous.keys():
+            folder_id = googleHandler.document_search(name)
+            doc_id = googleHandler.get_file_id_by_name(name, folder_id)
 
-        if googleHandler.check_string_in_doc(doc_id, "Unpublished"):
-            pubStr = "Unpublished"
-        elif googleHandler.check_string_in_doc(doc_id, "Published"):
-            pubStr = "Published"
-        else:
-            pubStr = "Unknown"
+            if googleHandler.check_string_in_doc(doc_id, "Unpublished"):
+                pubStr = "Unpublished"
+            elif googleHandler.check_string_in_doc(doc_id, "Published"):
+                pubStr = "Published"
+            else:
+                pubStr = "Unknown"
 
-        final_embed.add_field(
-            name=f"{name}: {pubStr}", value=(f"{previous[name]}"), inline=False
+            final_embed.add_field(
+                name=f"{name}: {pubStr}", value=(f"{previous[name]}"), inline=False
+            )
+
+        await original_message.edit(embed=final_embed)
+        print("Responded to list command!")
+    except HttpError:
+        setting_embed = discord.Embed(
+            title="Transparency Report List",
+            description="HTTP Error",
+            color=discord.Color.red(),
         )
-
-    await original_message.edit(embed=final_embed)
-    print("Responded to list command!")
+        await original_message.edit(embed=setting_embed)
 
 
 @tree.command(
