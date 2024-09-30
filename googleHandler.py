@@ -34,6 +34,7 @@ docs_service = build("docs", "v1", credentials=credentials)
 # Define functions
 def clone_document(file_id, new_title):
     """
+    Duplicates document and gives it a new title
     Args:
         - file_id: String - target ID
         - new_title: String - name of new document
@@ -45,6 +46,8 @@ def clone_document(file_id, new_title):
 
 def file_exists(file_name, folder_id):
     """
+    Checks if file exists in folder
+    TODO: Check if this is redundant and can be removed
     Args:
         - file_name: String - name of file
         - folder_id: folder to search
@@ -71,6 +74,11 @@ def file_exists(file_name, folder_id):
 def get_file_id_by_name(file_name, folder_id):
     """
     Should be run in conjunction with file_exists
+    Args:
+        - file_name: Str
+        - folder_id
+    Returns:
+        - Str: file ID or NoneType
     """
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     service = drive_service
@@ -103,6 +111,7 @@ def get_file_id_by_name(file_name, folder_id):
 # Docs service functions
 def replace_text(document_id, old_text: str, new_text: str):
     """
+    replaces text in given document ID
     Args:
         - document_id: String
         - old_text: String
@@ -132,6 +141,10 @@ async def run_doc_update(dm_count, sdm_count):
     Updates quarterly transparency report
 
     currently meant to be called in bot.py
+
+    Args:
+        - dm_count: int
+        - sdm_count: int
     """
     print("Starting document update!")
 
@@ -166,6 +179,7 @@ async def run_doc_update(dm_count, sdm_count):
 
 def get_file_link(folder_id, file_name):
     """
+    Gets file link based on folder_id and file_name
     Args:
         - folder_id: String - target folder for search
         - file_name: String - file name
@@ -195,6 +209,7 @@ def get_file_link(folder_id, file_name):
 
 def find_previous_docs(folder_id):
     """
+    lists out documents in a folder
     Args:
         - folder_id: String - target folder ID
     Returns:
@@ -226,6 +241,7 @@ def find_previous_docs(folder_id):
 
 def move_file(file_name, start_folder, destination_folder):
     """
+    Moves file from start folder to destination folder
     Args:
     - file_name: String - Target file name
     - start_folder: String - source folder ID
@@ -274,6 +290,7 @@ def move_file(file_name, start_folder, destination_folder):
 
 def get_folder_from_docname(file_name):
     """
+    Returns a folder based on a document name that is given
     Args:
         - file_name: String
     Returns:
@@ -299,6 +316,7 @@ def make_announcement(document_id, title="", content=""):
 
 def check_string_in_doc(document_id, search_string):
     """
+    Looks for a string in a document and returns true or false.
     Args:
     - document_id: String target document ID
     - search_string: target string
@@ -323,6 +341,12 @@ def check_string_in_doc(document_id, search_string):
 
 
 def search_file_in_folder(folder_id, file_name):
+    """
+    looks for a file in a folder
+    Args:
+        - folder_id: Str
+        - file_name: Str
+    """
     query = f"'{folder_id}' in parents and name = '{file_name}'"
     service = drive_service
 
