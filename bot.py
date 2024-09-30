@@ -69,7 +69,9 @@ async def doc_update(interaction: discord.Interaction):
         sdm_count = await get_role_member_count(
             doc_config.guild_id, doc_config.sdm_role_name
         )
-        dm_count = await get_role_member_count(doc_config.guild_id, doc_config.dm_role_name)
+        dm_count = await get_role_member_count(
+            doc_config.guild_id, doc_config.dm_role_name
+        )
         await googleHandler.run_doc_update(dm_count, sdm_count)
         name = quarterHandler.make_file_name()
         link = googleHandler.get_file_link(doc_config.folder_id, name)

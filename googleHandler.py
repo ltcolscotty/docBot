@@ -304,7 +304,7 @@ def get_folder_from_docname(file_name: str):
         return None
 
 
-def make_announcement(document_id: str, title: str ="", content: str =""):
+def make_announcement(document_id: str, title: str = "", content: str = ""):
     """
     TODO:
     - add new announcementTitleHolder on a new line in bold
