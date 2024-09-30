@@ -16,9 +16,9 @@ Standard files are hidden such as the .env folder containing the API key to the 
 
 ## Commands
 
-``doc-update`` - Creates/Updates Document
-``announcement-set`` - Sets announcements
-    - TODO: Needs to revamp
-``previous-reports`` - lists out previous documents
-``publish-quarter`` - Prepares document and transfers it to the public folder
-``toggle-visibility`` - moves specified document to public/private folder
+``doc-update`` - Creates/Updates Document <br>
+``announcement-set`` - Sets announcements <br>
+    - TODO: Needs to revamp <br>
+``previous-reports`` - lists out previous documents <br>
+``publish-quarter`` - Prepares document and transfers it to the public folder <br>
+``toggle-visibility`` - moves specified document to public/private folder <br>
