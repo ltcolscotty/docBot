@@ -55,7 +55,7 @@ async def doc_clone_command(interaction: discord.Interaction):
 )
 async def doc_update(interaction: discord.Interaction):
     """
-    Slash command interaction
+    Creates transparency document or updates it
     """
     initial_embed = discord.Embed(
         title="Transparency Report Request",
@@ -97,6 +97,9 @@ async def doc_update(interaction: discord.Interaction):
 async def announcement_set(
     interaction: discord.Interaction, title: str = "", text: str = ""
 ):
+    """
+    Sets the announcement in the current document
+    """
     initial_embed = discord.Embed(
         title="Announcement Set",
         description="Command recieved! Processing updates...",
@@ -137,6 +140,9 @@ async def announcement_set(
     guild=discord.Object(id=doc_config.guild_id),
 )
 async def list_docs(interaction: discord.Interaction):
+    """
+    Lists previous documents that are found in public and private folders
+    """
     print("List command called!")
     initial_embed = discord.Embed(
         title="Transparency Report List",
@@ -319,6 +325,9 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
 
 @client.event
 async def on_message(message: discord.Message):
+    """
+    Test Message detector 2
+    """
     if message.author == client.user:
         return
     if message.content == "bing chilling":
@@ -330,6 +339,7 @@ async def on_message(message: discord.Message):
 
 async def get_role_member_count(guild_id, role_name):
     """
+    Gets the number of people with the given role name in a given server ID
     Args:
     - guild_id: int
     - role_name: String
