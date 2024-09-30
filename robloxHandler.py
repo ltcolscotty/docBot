@@ -3,6 +3,7 @@ from roblox import Client
 
 async def get_role_count(group_id):
     """
+    Gets number of people in each role
     Args:
     - group_id: int
     Returns:
