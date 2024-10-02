@@ -2,8 +2,6 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from urllib.parse import quote
-
 import os
 
 import quarterHandler
@@ -190,11 +188,8 @@ def get_file_link(file_name: str, folder_id: str):
     """
     service = drive_service
     try:
-        # Encode the file name to handle special characters
-        encoded_file_name = quote(file_name)
-
         # Construct the correct query
-        query = f"'{folder_id}' in parents and name = '{encoded_file_name}' and trashed = false"
+        query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
 
         results = (
             service.files()
