@@ -74,7 +74,7 @@ async def doc_update(interaction: discord.Interaction):
         )
         await googleHandler.run_doc_update(dm_count, sdm_count)
         name = quarterHandler.make_file_name()
-        link = googleHandler.get_file_link(doc_config.folder_id, name)
+        link = googleHandler.get_file_link(name, doc_config.folder_id)
 
         updated_embed = discord.Embed(
             title="Transparency Report Request",
@@ -239,7 +239,7 @@ async def publishDoc(interaction: discord.Interaction):
             cur_name, doc_config.folder_id, doc_config.share_folder_id
         )
 
-        link = googleHandler.get_file_link(doc_config.share_folder_id, cur_name)
+        link = googleHandler.get_file_link(cur_name, doc_config.share_folder_id)
 
         setting_embed = discord.Embed(
             title="Publishing Document",
