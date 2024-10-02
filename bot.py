@@ -14,8 +14,6 @@ from googleapiclient.errors import HttpError
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-# print(f"running token: {TOKEN}")
-
 intents = discord.Intents.default()
 intents.messages = True
 intents.members = True
