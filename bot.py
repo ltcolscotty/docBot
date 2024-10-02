@@ -348,13 +348,14 @@ async def on_message(message: discord.Message):
 async def get_role_member_count(guild_id, role_name):
     """
     Gets the number of people with the given role name in a given server ID
-    Args:
-    - guild_id: int
-    - role_name: String
 
-    Returns: Tuple
-    tuple[0]: int member count
-    tuple[1]: Error if there is any
+    Args:
+        guild_id: int
+        role_name: String
+
+    Returns:
+        tuple[0]: int member count
+        tuple[1]: Error if there is any
     """
     guild = client.get_guild(guild_id)
     if not guild:
