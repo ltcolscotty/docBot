@@ -200,7 +200,8 @@ def get_file_link(file_name: str, folder_id: str):
         files = results.get("files", [])
 
         if not files:
-            raise HttpError(resp=None, content=f"No file named '{file_name}' found in the specified folder.".encode())
+            print(f"No file named '{file_name}' found in the specified folder.")
+            return None
 
         # Get the first file that matches (assuming file names are unique in the folder)
         file = files[0]
