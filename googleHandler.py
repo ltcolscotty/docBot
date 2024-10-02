@@ -194,17 +194,21 @@ def get_file_link(file_name: str, folder_id: str):
     try:
         # Encode the file name to handle special characters
         encoded_file_name = quote(file_name)
-        
+
         # Construct a more flexible query
         query = f"'{folder_id}' in parents and name contains '{encoded_file_name}' and trashed = false"
-        
-        results = service.files().list(
-            q=query,
-            spaces="drive",
-            fields="files(id, name, webViewLink)",
-            supportsAllDrives=True
-        ).execute()
-        
+
+        results = (
+            service.files()
+            .list(
+                q=query,
+                spaces="drive",
+                fields="files(id, name, webViewLink)",
+                supportsAllDrives=True,
+            )
+            .execute()
+        )
+
         files = results.get("files", [])
 
         if not files:
@@ -214,9 +218,11 @@ def get_file_link(file_name: str, folder_id: str):
         # Get the first file that matches
         file = files[0]
         return file.get("webViewLink")
-    
+
     except HttpError as error:
-        error_details = error.error_details[0] if error.error_details else "Unknown error"
+        error_details = (
+            error.error_details[0] if error.error_details else "Unknown error"
+        )
         print(f"An error occurred: {error}. Details: {error_details}")
         return None
 
