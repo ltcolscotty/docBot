@@ -79,6 +79,8 @@ def get_file_id_by_name(file_name: str, folder_id: str):
         - folder_id
     Returns:
         - Str: file ID or NoneType
+    Raises:
+        - HttpError
     """
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     service = drive_service
@@ -185,6 +187,8 @@ def get_file_link(file_name: str, folder_id: str):
         - file_name: String - file name
     Returns:
         - link of file_name file or None if not found
+    Raises:
+        - HttpError
     """
     service = drive_service
     try:
@@ -256,6 +260,10 @@ def move_file(file_name: str, start_folder: str, destination_folder: str):
     - file_name: String - Target file name
     - start_folder: String - source folder ID
     - destination_folder: String - destination folder ID
+    Returns:
+    - String: api response
+    Raises:
+    - HttpError
     """
     service = drive_service
     try:
