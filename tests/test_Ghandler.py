@@ -1,6 +1,10 @@
 """
 Tests google handler
+
+Use before testing:
+$env:PYTHONPATH = "C:\path\to\root"
 """
+
 import googleHandler
 import doc_config
 

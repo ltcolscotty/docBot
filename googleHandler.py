@@ -185,26 +185,31 @@ def get_file_link(file_name: str, folder_id: str):
         - file_name: String - file name
     Returns:
         - link of file_name file
+    Raises:
+        - HttpError: If there's an error with the API request
     """
     service = drive_service
-    # Search for the file in the specified folder
-    query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
-    results = (
-        service.files()
-        .list(q=query, spaces="drive", fields="files(id, name, webViewLink)")
-        .execute()
-    )
-    files = results.get("files", [])
+    try:
+        # Search for the file in the specified folder
+        query = f"'{folder_id}' in parents and name = '{file_name}' and trashed = false"
+        results = (
+            service.files()
+            .list(q=query, spaces="drive", fields="files(id, name, webViewLink)")
+            .execute()
+        )
+        files = results.get("files", [])
 
-    if not files:
-        print(f"No file named '{file_name}' found in the specified folder.")
-        return None
+        if not files:
+            raise HttpError(resp=None, content=f"No file named '{file_name}' found in the specified folder.".encode())
 
-    # Get the first file that matches (assuming file names are unique in the folder)
-    file = files[0]
+        # Get the first file that matches (assuming file names are unique in the folder)
+        file = files[0]
 
-    # Return the webViewLink
-    return file.get("webViewLink")
+        # Return the webViewLink
+        return file.get("webViewLink")
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        raise
 
 
 def find_previous_docs(folder_id: str):
