@@ -62,10 +62,11 @@ async def doc_update(interaction: discord.Interaction):
         description="Command recieved! Processing updates...",
         color=discord.Color.yellow(),
     )
+    await interaction.response.send_message(embed=initial_embed)
+    original_message = await interaction.original_response()
 
     try:
-        await interaction.response.send_message(embed=initial_embed)
-        original_message = await interaction.original_response()
+
         sdm_count = await get_role_member_count(
             doc_config.guild_id, doc_config.sdm_role_name
         )
@@ -152,6 +153,8 @@ async def list_docs(interaction: discord.Interaction):
         color=discord.Color.yellow(),
     )
     await interaction.response.send_message(embed=initial_embed)
+    original_message = await interaction.original_response()
+
     try:
         previous_private = googleHandler.find_previous_docs(doc_config.folder_id)
         previous_public = googleHandler.find_previous_docs(doc_config.share_folder_id)
@@ -164,7 +167,6 @@ async def list_docs(interaction: discord.Interaction):
             previous = previous_private.copy()
             previous.update(previous_public)
 
-        original_message = await interaction.original_response()
         final_embed = discord.Embed(
             title="Transparency Report List",
             color=discord.Color.green(),
