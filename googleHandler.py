@@ -35,9 +35,10 @@ docs_service = build("docs", "v1", credentials=credentials)
 def clone_document(file_id: str, new_title: str):
     """
     Duplicates document and gives it a new title
+
     Args:
-        - file_id: String - target ID
-        - new_title: String - name of new document
+        file_id: String - target ID
+        new_title: String - name of new document
     """
     service = drive_service
     copied_file = {"name": new_title, "parents": [folder_id]}
@@ -48,11 +49,13 @@ def file_exists(file_name: str, folder_id: str):
     """
     Checks if file exists in folder
     TODO: Check if this is redundant and can be removed
+
     Args:
-        - file_name: String - name of file
-        - folder_id: folder to search
+        file_name: String - name of file
+        folder_id: folder to search
+
     Returns:
-        - boolean: file exists in folder
+        boolean: file exists in folder
     """
     service = drive_service
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
@@ -75,12 +78,14 @@ def get_file_id_by_name(file_name: str, folder_id: str):
     """
     Should be run in conjunction with file_exists
     Args:
-        - file_name: Str
-        - folder_id
+        file_name: Str
+        folder_id
+
     Returns:
-        - Str: file ID or NoneType
+        Str: file ID or NoneType
+
     Raises:
-        - HttpError
+        HttpError
     """
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     service = drive_service
@@ -113,14 +118,15 @@ def get_file_id_by_name(file_name: str, folder_id: str):
 # Docs service functions
 def replace_text(document_id: str, old_text: str, new_text: str):
     """
-    replaces text in given document ID
+    Replaces text in given document ID
+
     Args:
-        - document_id: String
-        - old_text: String
-        - new_text: String
+        document_id: String
+        old_text: String
+        new_text: String
 
     Returns:
-        - result: batchUpdate
+        result: batchUpdate
     """
     requests = [
         {
@@ -140,13 +146,11 @@ def replace_text(document_id: str, old_text: str, new_text: str):
 
 async def run_doc_update(dm_count: int, sdm_count: int):
     """
-    Updates quarterly transparency report
-
-    currently meant to be called in bot.py
+    Updates quarterly transparency report. Currently meant to be called in bot.py
 
     Args:
-        - dm_count: int
-        - sdm_count: int
+        dm_count: int
+        sdm_count: int
     """
     print("Starting document update!")
 
@@ -182,13 +186,16 @@ async def run_doc_update(dm_count: int, sdm_count: int):
 def get_file_link(file_name: str, folder_id: str):
     """
     Gets file link based on folder_id and file_name
+
     Args:
-        - folder_id: String - target folder for search
-        - file_name: String - file name
+        folder_id: String - target folder for search
+        file_name: String - file name
+
     Returns:
-        - link of file_name file or None if not found
+        link of file_name file or None if not found
+
     Raises:
-        - HttpError
+        HttpError
     """
     service = drive_service
     try:
@@ -223,11 +230,13 @@ def get_file_link(file_name: str, folder_id: str):
 
 def find_previous_docs(folder_id: str):
     """
-    lists out documents in a folder
+    Lists out documents in a folder
+
     Args:
-        - folder_id: String - target folder ID
+        folder_id: String - target folder ID
+
     Returns:
-        - dictionary: {document_name, file_link}
+        dictionary: {document_name, file_link}
     """
     service = drive_service
     query = f"'{folder_id}' in parents and trashed = false"
@@ -256,14 +265,17 @@ def find_previous_docs(folder_id: str):
 def move_file(file_name: str, start_folder: str, destination_folder: str):
     """
     Moves file from start folder to destination folder
+
     Args:
-    - file_name: String - Target file name
-    - start_folder: String - source folder ID
-    - destination_folder: String - destination folder ID
+        file_name: String - Target file name
+        start_folder: String - source folder ID
+        destination_folder: String - destination folder ID
+
     Returns:
-    - String: api response
+        String: api response
+
     Raises:
-    - HttpError
+        HttpError
     """
     service = drive_service
     try:
@@ -309,10 +321,12 @@ def move_file(file_name: str, start_folder: str, destination_folder: str):
 def get_folder_from_docname(file_name: str):
     """
     Returns a folder based on a document name that is given
+
     Args:
-        - file_name: String
+        file_name: String
+
     Returns:
-        - folder_id: String
+        folder_id: String
     """
     if search_file_in_folder(doc_config.folder_id, file_name) is not None:
         return doc_config.folder_id
@@ -335,11 +349,13 @@ def make_announcement(document_id: str, title: str = "", content: str = ""):
 def check_string_in_doc(document_id: str, search_string: str):
     """
     Looks for a string in a document and returns true or false.
+
     Args:
-    - document_id: String target document ID
-    - search_string: target string
+        document_id: String target document ID
+        search_string: target string
+
     Returns:
-    - Boolean: does string exist in the document
+        Boolean: does string exist in the document
     """
     service = docs_service
     # Retrieve the document content
@@ -360,10 +376,11 @@ def check_string_in_doc(document_id: str, search_string: str):
 
 def search_file_in_folder(folder_id: str, file_name: str):
     """
-    looks for a file in a folder
+    Looks for a file in a folder
+
     Args:
-        - folder_id: Str
-        - file_name: Str
+        folder_id: Str
+        file_name: Str
     """
     query = f"'{folder_id}' in parents and name = '{file_name}'"
     service = drive_service
