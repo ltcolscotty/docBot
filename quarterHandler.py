@@ -6,8 +6,8 @@ def get_time_info():
     Gets information for make_file_name()
 
     Returns:
-        list[0]: String: Quarter
-        list[1]: int: Year
+        list[0]: string - Quarter
+        list[1]: int - Year
     """
     today = datetime.datetime.now()
 

@@ -204,9 +204,9 @@ async def list_docs(interaction: discord.Interaction):
 async def publishDoc(interaction: discord.Interaction):
     """
     Tasks:
-    - Clean up holder text
-    - Move document to new folder
-    - Return link in response
+        - Clean up holder text
+        - Move document to new folder
+        - Return link in response
     """
     print("Publish command called!")
     initial_embed = discord.Embed(
