@@ -48,6 +48,7 @@ def clone_document(file_id: str, new_title: str):
 def file_exists(file_name: str, folder_id: str):
     """
     Checks if file exists in folder
+
     TODO: Check if this is redundant and can be removed
 
     Args:
@@ -78,14 +79,14 @@ def get_file_id_by_name(file_name: str, folder_id: str):
     """
     Should be run in conjunction with file_exists
     Args:
-        file_name: Str
-        folder_id
+        file_name: String
+        folder_id: String
 
     Returns:
         Str: file ID or NoneType
 
     Raises:
-        HttpError
+        HttpError: Error from query
     """
     query = f"name='{file_name}' and trashed=false and '{folder_id}' in parents"
     service = drive_service
@@ -192,10 +193,10 @@ def get_file_link(file_name: str, folder_id: str):
         file_name: String - file name
 
     Returns:
-        link of file_name file or None if not found
+        String: link of file_name file or **None** if not found
 
     Raises:
-        HttpError
+        HttpError: Error raised if query issue
     """
     service = drive_service
     try:
@@ -275,7 +276,7 @@ def move_file(file_name: str, start_folder: str, destination_folder: str):
         String: api response
 
     Raises:
-        HttpError
+        HttpError: Error from api query
     """
     service = drive_service
     try:
@@ -341,6 +342,11 @@ def make_announcement(document_id: str, title: str = "", content: str = ""):
     TODO:
     - add new announcementTitleHolder on a new line in bold
     - add a new announcementHolder in a line below
+
+    Args:
+        document_id: String - document ID
+        title: String - title of announcement
+        content: String - content of announcement
     """
     replace_text(document_id, "announcementTitleHolder", title)
     replace_text(document_id, "announcementHolder", content)
@@ -355,7 +361,7 @@ def check_string_in_doc(document_id: str, search_string: str):
         search_string: target string
 
     Returns:
-        Boolean: does string exist in the document
+        boolean: does string exist in the document
     """
     service = docs_service
     # Retrieve the document content
