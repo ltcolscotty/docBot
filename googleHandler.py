@@ -177,7 +177,7 @@ async def run_doc_update(dm_count: int, sdm_count: int):
     print("Finished Update")
 
 
-def get_file_link(folder_id: str, file_name: str):
+def get_file_link(file_name: str, folder_id: str):
     """
     Gets file link based on folder_id and file_name
     Args:
