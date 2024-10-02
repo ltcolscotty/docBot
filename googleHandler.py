@@ -187,16 +187,14 @@ def get_file_link(file_name: str, folder_id: str):
         - file_name: String - file name
     Returns:
         - link of file_name file or None if not found
-    Raises:
-        - HttpError: If there's an error with the API request
     """
     service = drive_service
     try:
         # Encode the file name to handle special characters
         encoded_file_name = quote(file_name)
 
-        # Construct a more flexible query
-        query = f"'{folder_id}' in parents and name contains '{encoded_file_name}' and trashed = false"
+        # Construct the correct query
+        query = f"'{folder_id}' in parents and name = '{encoded_file_name}' and trashed = false"
 
         results = (
             service.files()
@@ -212,7 +210,7 @@ def get_file_link(file_name: str, folder_id: str):
         files = results.get("files", [])
 
         if not files:
-            print(f"No file containing '{file_name}' found in the specified folder.")
+            print(f"No file named '{file_name}' found in the specified folder.")
             return None
 
         # Get the first file that matches
@@ -220,10 +218,7 @@ def get_file_link(file_name: str, folder_id: str):
         return file.get("webViewLink")
 
     except HttpError as error:
-        error_details = (
-            error.error_details[0] if error.error_details else "Unknown error"
-        )
-        print(f"An error occurred: {error}. Details: {error_details}")
+        print(f"An error occurred: {error}")
         return None
 
 
