@@ -152,25 +152,24 @@ async def list_docs(interaction: discord.Interaction):
         color=discord.Color.yellow(),
     )
     await interaction.response.send_message(embed=initial_embed)
-
-    previous_private = googleHandler.find_previous_docs(doc_config.folder_id)
-    previous_public = googleHandler.find_previous_docs(doc_config.share_folder_id)
-
-    if previous_private is None:
-        previous = previous_public
-    elif previous_public is None:
-        previous = previous_private
-    else:
-        previous = previous_private.copy()
-        previous.update(previous_public)
-
-    original_message = await interaction.original_response()
-    final_embed = discord.Embed(
-        title="Transparency Report List",
-        color=discord.Color.green(),
-    )
-
     try:
+        previous_private = googleHandler.find_previous_docs(doc_config.folder_id)
+        previous_public = googleHandler.find_previous_docs(doc_config.share_folder_id)
+
+        if previous_private is None:
+            previous = previous_public
+        elif previous_public is None:
+            previous = previous_private
+        else:
+            previous = previous_private.copy()
+            previous.update(previous_public)
+
+        original_message = await interaction.original_response()
+        final_embed = discord.Embed(
+            title="Transparency Report List",
+            color=discord.Color.green(),
+        )
+
         for name in previous.keys():
             folder_id = googleHandler.get_folder_from_docname(name)
             doc_id = googleHandler.get_file_id_by_name(name, folder_id)
