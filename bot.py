@@ -324,25 +324,6 @@ async def toggle_location(interaction: discord.Interaction, file_name: str):
         await original_message.edit(embed=notif_embed)
 
 
-@client.event
-async def on_message(message: discord.Message):
-    """
-    Test Message detector 2
-    """
-    if message.author == client.user:
-        return
-    if message.content == "bing chilling":
-        print(f"Message Recieved from {message.author}: {message.content}, Responding!")
-        response = (
-            "早上好中国 现在我有冰淇淋 我很喜欢冰淇淋 但是 速度与激情9 比冰淇淋 "
-            "速度与激情 速度与激情9 我最喜欢 所以…现在是音乐时间 准备 1 2 3 "
-            "两个礼拜以后 速度与激情9 x3 不要忘记 不要错过 记得去电影院看速度与激情9"
-            " 因为非常好电影 动作非常好 差不多一样冰淇淋 再见"
-        )
-
-        await message.channel.send(response)
-
-
 async def get_role_member_count(guild_id, role_name):
     """
     Gets the number of people with the given role name in a given server ID
